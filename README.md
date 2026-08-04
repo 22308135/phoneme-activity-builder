@@ -75,7 +75,7 @@ npm run start
 ```text
 src/
 ├── app/
-│   ├── about/          About page and video area
+│   ├── about/          Project and author information
 │   ├── api/download/   Standalone HTML download endpoint
 │   ├── settings/       Theme and layout preferences
 │   ├── word-search/    Word Search page
