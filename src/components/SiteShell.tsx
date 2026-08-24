@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 
 const links = [
   ["Home", "/"],
+  ["Saved Activities", "/activities"],
   ["Wordle", "/wordle"],
   ["Word Search", "/word-search"],
 ];
@@ -40,6 +41,6 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
       </div>
     </header>
     <main id="main-content">{children}</main>
-    <footer><span>Phoneme Play Builder · Assessment 1</span><span>Louis Callander · 22308135</span></footer>
+    <footer><span>Phoneme Play Builder · Assessment 2</span><span>Louis Callander · 22308135</span></footer>
   </div>;
 }

@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DownloadButton } from "./DownloadButton";
+import type { SavedActivity } from "@/lib/activityTypes";
 
 type Difficulty = "Foundation" | "Developing" | "Extending";
 type Guess = { sounds: string[]; result: ("correct" | "present" | "absent")[] };
-const options = [
+const defaultOptions = [
   { phonemes: ["θ", "ɪ", "n"], word: "thin", hint: "A slim shape or object" },
   { phonemes: ["ʃ", "ɪ", "p"], word: "ship", hint: "It travels on water" },
   { phonemes: ["tʃ", "ɪ", "p"], word: "chip", hint: "A small piece, or a snack" },
@@ -15,6 +16,9 @@ const soundHints: Record<string, string> = { θ: "TH as in thin", ʃ: "SH as in 
 const settings = { Foundation: { attempts: 6, keyCount: 6, hint: "shown" }, Developing: { attempts: 5, keyCount: 9, hint: "optional" }, Extending: { attempts: 4, keyCount: 12, hint: "hidden" } } as const;
 
 export function WordleBuilder() {
+  const [activities, setActivities] = useState<SavedActivity[]>([]);
+  const [activityId, setActivityId] = useState<number | "">("");
+  const [options, setOptions] = useState(defaultOptions);
   const [index, setIndex] = useState(0);
   const [difficulty, setDifficulty] = useState<Difficulty>("Foundation");
   const [current, setCurrent] = useState<string[]>([]);
@@ -29,6 +33,22 @@ export function WordleBuilder() {
   const resetGame = () => { setCurrent([]); setGuesses([]); setMessage("Choose the phoneme tiles in order."); setShowHint(difficulty === "Foundation"); };
   const changeTarget = (nextIndex: number) => { setIndex(nextIndex); setCurrent([]); setGuesses([]); setMessage("Choose the phoneme tiles in order."); };
   const changeDifficulty = (next: Difficulty) => { setDifficulty(next); setCurrent([]); setGuesses([]); setMessage("Choose the phoneme tiles in order."); setShowHint(next === "Foundation"); };
+  const applyActivity = (activity: SavedActivity) => {
+    const nextOptions = activity.words.map((word) => ({ phonemes: word.phonemes, word: word.text, hint: word.hint ?? "No hint provided" }));
+    if (!nextOptions.length) return;
+    const targetIndex = Math.max(0, activity.words.findIndex((word) => word.isTarget));
+    setActivityId(activity.id); setOptions(nextOptions); setIndex(targetIndex);
+    changeDifficulty((activity.difficulty.charAt(0) + activity.difficulty.slice(1).toLowerCase()) as Difficulty);
+  };
+  useEffect(() => {
+    fetch("/api/activities?type=WORDLE", { cache: "no-store" }).then((response) => response.ok ? response.json() : Promise.reject()).then((saved: SavedActivity[]) => {
+      setActivities(saved);
+      const requested = Number(new URLSearchParams(window.location.search).get("activity"));
+      const selected = saved.find((activity) => activity.id === requested);
+      if (selected) applyActivity(selected);
+    }).catch(() => undefined);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const addSound = (sound: string) => { if (!gameOver && current.length < choice.phonemes.length) setCurrent([...current, sound]); };
   const submitGuess = () => {
     if (gameOver) return;
@@ -41,10 +61,11 @@ export function WordleBuilder() {
 
   return <section className="builder-grid">
     <aside className="control-panel" aria-label="Wordle settings"><p className="eyebrow">Activity settings</p><h1>Build a phoneme Wordle</h1>
+      <div className="saved-source"><label>Load saved activity<select value={activityId} onChange={(event) => { const activity = activities.find((item) => item.id === Number(event.target.value)); if (activity) applyActivity(activity); }}><option value="">Assessment 1 examples</option>{activities.map((activity) => <option key={activity.id} value={activity.id}>{activity.title}</option>)}</select></label></div>
       <label>Target phoneme word<select value={index} onChange={(event) => changeTarget(Number(event.target.value))}>{options.map((option, optionIndex) => <option value={optionIndex} key={option.word}>/{option.phonemes.join("/ /")}/ · {option.word}</option>)}</select></label>
       <label>Difficulty<select value={difficulty} onChange={(event) => changeDifficulty(event.target.value as Difficulty)}><option>Foundation</option><option>Developing</option><option>Extending</option></select></label>
       <div className="tip"><strong>{difficulty}</strong><br />{config.attempts} attempts · {config.keyCount} sound keys · hint {config.hint}.</div>
-      <DownloadButton activity="wordle" answer={choice.phonemes.join(" ")} hint={choice.hint} words={[choice.word]} difficulty={difficulty} />
+      <DownloadButton activity="wordle" answer={choice.phonemes.join(" ")} hint={choice.hint} words={[choice.word]} difficulty={difficulty} savedActivityId={activityId || undefined} />
     </aside>
     <section className="preview-card" aria-label="Live Wordle preview"><div className="preview-bar"><span>Live playable preview</span><span className="status-dot">● {won ? "Complete" : gameOver ? "Finished" : `${guesses.length} of ${config.attempts} attempts`}</span></div><div className="game-preview wordle-game">
       <p className="game-label">Phoneme Wordle</p><h2>Listen. Look. Build the word.</h2>

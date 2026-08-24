@@ -1,8 +1,8 @@
 # Phoneme Play Builder
 
-Phoneme Play Builder is a frontend activity-building tool for Speech Pathology teachers and students. It allows a teacher to configure, preview, and download phoneme-based Wordle and Word Search activities as standalone HTML files that run in a normal web browser.
+Phoneme Play Builder is a database-backed activity-building tool for Speech Pathology teachers and students. It allows a teacher to create and manage phoneme word lists, configure activities, preview them, and download Wordle and Word Search activities as standalone HTML files.
 
-This project was created for **Assessment 1: Frontend Design and Usability**. Assessment 1 focuses on interface design, responsive layout, usability, accessibility, and reusable React components. It does not use a database or dynamic word-list management; those features are planned for later assessments.
+The Assessment 1 frontend has been extended for **Assessment 2: Backend and Database Development** with Prisma, SQLite, validated API routes, persistent CRUD operations, a health endpoint, and Docker support.
 
 ## Author
 
@@ -61,6 +61,43 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in a browser.
+
+Create the local database and demonstration records before first use:
+
+```bash
+copy .env.example .env
+npm run db:generate
+npm run db:deploy
+npm run db:seed
+```
+
+## Backend and API
+
+Prisma stores multiple Wordle and Word Search configurations in SQLite. Each word stores its ordered phonemes as a JSON-encoded array of strings, so phonemes such as `tʃ` and `dʒ` remain single sound units rather than being split into characters. Deleting an activity cascades to its words.
+
+| Method | Route | Purpose |
+| --- | --- | --- |
+| `GET` | `/health` | Check the application and database; returns 200 when healthy |
+| `GET` | `/api/activities` | List saved activities; optionally filter with `?type=WORDLE` |
+| `POST` | `/api/activities` | Validate and create an activity and word list |
+| `GET` | `/api/activities/:id` | Retrieve one complete activity |
+| `PUT` | `/api/activities/:id` | Validate and replace its settings and words |
+| `DELETE` | `/api/activities/:id` | Delete an activity and its words |
+| `GET` | `/api/activities/:id/download` | Generate playable HTML directly from the stored record |
+| `POST` | `/api/download` | Return the current database-loaded preview as standalone HTML |
+
+The `/activities` screen demonstrates the complete teacher CRUD workflow. Both builders can load a saved activity and generate their preview and download from its stored words and settings. Zod validates incoming payloads before Prisma writes to the database.
+
+## Docker
+
+Build and run the complete application with a persistent SQLite volume:
+
+```bash
+docker build -t phoneme-activity-builder .
+docker run --name phoneme-builder -p 3000:3000 -v phoneme-data:/data phoneme-activity-builder
+```
+
+Open `http://localhost:3000` and verify `http://localhost:3000/health`. Container startup applies committed Prisma migrations and adds demonstration records only when the database is empty.
 
 Run the production and code-quality checks:
 

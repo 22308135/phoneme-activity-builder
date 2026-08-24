@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { DownloadButton } from "./DownloadButton";
 import { generateWordSearch, WORD_SEARCH_HINTS } from "@/lib/wordSearch";
+import type { SavedActivity } from "@/lib/activityTypes";
 
-const phonemeWords = [
+const defaultPhonemeWords = [
   { id: "thin", sounds: ["θ", "ɪ", "n"] },
   { id: "ship", sounds: ["ʃ", "ɪ", "p"] },
   { id: "chip", sounds: ["tʃ", "ɪ", "p"] },
@@ -22,15 +23,33 @@ function cellsBetween(start: number, end: number, size: number) {
 }
 
 export function WordSearchBuilder() {
+  const [activities, setActivities] = useState<SavedActivity[]>([]);
+  const [activityId, setActivityId] = useState<number | "">("");
+  const [phonemeWords, setPhonemeWords] = useState(defaultPhonemeWords);
   const [enabled, setEnabled] = useState(phonemeWords.map((word) => word.id));
   const [gridSize, setGridSize] = useState(7);
   const [puzzleSeed, setPuzzleSeed] = useState(1);
-  const grid = useMemo(() => generateWordSearch(phonemeWords.map((word) => word.sounds), gridSize, puzzleSeed), [gridSize, puzzleSeed]);
+  const grid = useMemo(() => generateWordSearch(phonemeWords.map((word) => word.sounds), gridSize, puzzleSeed), [phonemeWords, gridSize, puzzleSeed]);
   const [start, setStart] = useState<number | null>(null);
   const [found, setFound] = useState<string[]>([]);
   const [foundCells, setFoundCells] = useState<number[]>([]);
   const [message, setMessage] = useState("Click the first and last sound in a word.");
   const activeWords = phonemeWords.filter((word) => enabled.includes(word.id));
+  const resetGame = () => { setStart(null); setFound([]); setFoundCells([]); setPuzzleSeed((seed) => seed + 1); setMessage("New puzzle generated. Click the first and last sound in a word."); };
+  const applyActivity = (activity: SavedActivity) => {
+    const words = activity.words.map((word) => ({ id: word.text, sounds: word.phonemes }));
+    if (!words.length) return;
+    setActivityId(activity.id); setPhonemeWords(words); setEnabled(words.map((word) => word.id)); setGridSize(activity.gridSize ?? 7); resetGame();
+  };
+  useEffect(() => {
+    fetch("/api/activities?type=WORD_SEARCH", { cache: "no-store" }).then((response) => response.ok ? response.json() : Promise.reject()).then((saved: SavedActivity[]) => {
+      setActivities(saved);
+      const requested = Number(new URLSearchParams(window.location.search).get("activity"));
+      const selected = saved.find((activity) => activity.id === requested);
+      if (selected) applyActivity(selected);
+    }).catch(() => undefined);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const selectCell = (index: number) => {
     if (start === null) { setStart(index); setMessage("Now click the last sound in the word."); return; }
@@ -44,7 +63,6 @@ export function WordSearchBuilder() {
     setMessage(nextFound.length === activeWords.length ? "Excellent — you found every phoneme word!" : `Found ${displaySounds(match.sounds)} — ${match.id}.`);
   };
 
-  const resetGame = () => { setStart(null); setFound([]); setFoundCells([]); setPuzzleSeed((seed) => seed + 1); setMessage("New puzzle generated. Click the first and last sound in a word."); };
   const toggleWord = (id: string) => {
     setEnabled((current) => current.includes(id) && current.length > 1 ? current.filter((word) => word !== id) : current.includes(id) ? current : [...current, id]);
     setFound([]); setFoundCells([]); setStart(null); setMessage("Click the first and last sound in a word.");
@@ -53,10 +71,11 @@ export function WordSearchBuilder() {
   return <section className="builder-grid">
     <aside className="control-panel" aria-label="Word Search settings">
       <p className="eyebrow">Activity settings</p><h1>Build a phoneme Word Search</h1>
+      <div className="saved-source"><label>Load saved activity<select value={activityId} onChange={(event) => { const activity = activities.find((item) => item.id === Number(event.target.value)); if (activity) applyActivity(activity); }}><option value="">Assessment 1 examples</option>{activities.map((activity) => <option key={activity.id} value={activity.id}>{activity.title}</option>)}</select></label></div>
       <label>Grid size<select value={gridSize} onChange={(event) => { setGridSize(Number(event.target.value)); setPuzzleSeed((seed) => seed + 1); setStart(null); setFound([]); setFoundCells([]); setMessage("New grid generated. Click the first and last sound in a word."); }}><option value="7">7 × 7</option><option value="8">8 × 8</option><option value="9">9 × 9</option></select></label>
       <fieldset><legend>Target words</legend>{phonemeWords.map((word) => <label className="check-row" key={word.id}><input type="checkbox" checked={enabled.includes(word.id)} disabled={enabled.includes(word.id) && enabled.length === 1} onChange={() => toggleWord(word.id)} /> {displaySounds(word.sounds)} · {word.id}</label>)}</fieldset>
       <div className="tip"><strong>Mixed directions</strong><br />Words run horizontally, vertically, diagonally and backwards. Click the first and last sound to select one.</div>
-      <DownloadButton activity="word-search" answer="" hint="Find each phoneme word" words={activeWords.map((word) => word.sounds.join(" "))} searchGrid={grid} searchSize={gridSize} />
+      <DownloadButton activity="word-search" answer="" hint="Find each phoneme word" words={activeWords.map((word) => word.sounds.join(" "))} searchGrid={grid} searchSize={gridSize} savedActivityId={activityId || undefined} />
     </aside>
     <section className="preview-card" aria-label="Live Word Search preview"><div className="preview-bar"><span>Live playable preview</span><span className="status-dot">● {found.length === activeWords.length && activeWords.length > 0 ? "Complete" : `${found.length} of ${activeWords.length} found`}</span></div><div className="game-preview">
       <p className="game-label">Phoneme Word Search</p><h2>Find the sound patterns</h2><p className="hint">Search across, down, diagonally and backwards. Click the first and last sound in each word.</p>
