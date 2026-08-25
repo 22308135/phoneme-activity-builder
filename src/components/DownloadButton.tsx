@@ -37,7 +37,9 @@ cells.forEach((sound,index)=>{const button=document.createElement("button");butt
 export function DownloadButton({ activity, answer, hint, words, difficulty = "Foundation", searchGrid = WORD_SEARCH_GRID, searchSize = WORD_SEARCH_SIZE, savedActivityId }: { activity: Activity; answer: string; hint: string; words: string[]; difficulty?: Difficulty; searchGrid?: string[][]; searchSize?: number; savedActivityId?: number }) {
   const download = () => {
     if (savedActivityId) {
-      window.location.assign(`/api/activities/${savedActivityId}/download`);
+      const link = document.createElement("a");
+      link.href = `/api/activities/${savedActivityId}/download`;
+      link.click();
       return;
     }
     const title = activity === "wordle" ? "Phoneme Wordle" : "Phoneme Word Search";

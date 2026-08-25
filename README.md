@@ -1,180 +1,106 @@
 # Phoneme Play Builder
 
-Phoneme Play Builder is a database-backed activity-building tool for Speech Pathology teachers and students. It allows a teacher to create and manage phoneme word lists, configure activities, preview them, and download Wordle and Word Search activities as standalone HTML files.
-
-The Assessment 1 frontend has been extended for **Assessment 2: Backend and Database Development** with Prisma, SQLite, validated API routes, persistent CRUD operations, a health endpoint, and Docker support.
+Phoneme Play Builder is a database-backed Next.js application for Speech Pathology teachers. Teachers can create phoneme word lists, save Wordle and Word Search configurations, reopen and edit them, preview playable activities, and download standalone HTML files for classroom use.
 
 ## Author
 
-- **Name:** Louis Callander
-- **Student number:** 22308135
+- Louis Callander
+- Student number: 22308135
+- Assessment 2: Backend and Database Development
 
-## Features
+## Assessment features
 
-### Phoneme Wordle
-
-- Uses one phoneme-based target word at a time
-- Provides Foundation, Developing, and Extending difficulty levels
-- Adjusts attempts, available sound keys, and hint behaviour
-- Displays phoneme-to-English hover hints and gameplay feedback
-- Reveals the English word when the activity is completed
-- Downloads as a standalone playable HTML file
-
-### Phoneme Word Search
-
-- Uses a selectable list of five phoneme words
-- Supports 7×7, 8×8, and 9×9 grids
-- Generates a new layout when the grid size changes or the activity is reset
-- Places words horizontally, vertically, diagonally, forwards, and backwards
-- Allows students to select a word by choosing its first and last sounds
-- Downloads the configured puzzle as a standalone playable HTML file
-
-### Interface
-
-- Home, About, Wordle, Word Search, and Settings pages
-- Responsive desktop and mobile layouts
-- Compact navigation menu for About and Settings
-- Cookie-based light/dark themes and layout preferences
-- Live playable previews before downloading
+- Teacher-facing create, read, update, and delete workflow at `/activities`
+- Ordered IPA phoneme storage, including multi-character units such as `tʃ` and `dʒ`
+- Multiple saved Wordle and Word Search configurations
+- Difficulty, hints, target words, grid size, and timestamps stored in SQLite
+- Zod validation before database writes
+- Prisma schema, migration history, seed data, and cascading word deletion
+- Live Wordle and Word Search previews driven by saved data
+- Server-generated, standalone HTML downloads from saved activity IDs
+- Database-aware `GET /health` endpoint
+- Docker image with automatic migration, seed data, health check, and persistent volume
+- Automated unit, API, desktop/mobile browser, and accessibility checks
 
 ## Technology
 
-- [Next.js](https://nextjs.org/) 16
-- [React](https://react.dev/) 19
+- Next.js 16 and React 19
 - TypeScript
-- CSS
+- Prisma ORM 6 and SQLite
+- Zod
+- Vitest, Playwright, and axe-core
+- Docker
 
-The project was created from `npx create-next-app .` as required by the assessment brief.
+## Local setup
 
-## Running the project
+Requirements: Node.js 22 LTS and npm. The Docker image uses Node.js 22 to keep the Prisma engine and application runtime reproducible.
 
-Requirements:
-
-- Node.js 20 or newer
-- npm
-
-Install dependencies and start the development server:
-
-```bash
-npm install
+```powershell
+Copy-Item .env.example .env
+npm ci
+npm run db:generate
+npm run db:setup
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in a browser.
+Open `http://localhost:3000`. Local setup synchronizes the schema and then runs the idempotent seed. Docker and production use the committed migration history through `db:deploy`.
 
-Create the local database and demonstration records before first use:
+## Quality checks
 
-```bash
-copy .env.example .env
-npm run db:generate
-npm run db:deploy
-npm run db:seed
+```powershell
+npm run lint
+npm run test
+npm run build
+npm run test:browser
 ```
 
-## Backend and API
+Unit tests cover schemas and activity generation. Browser tests check health, CRUD, downloads, desktop/mobile behaviour, and serious or critical axe accessibility violations in installed Microsoft Edge.
 
-Prisma stores multiple Wordle and Word Search configurations in SQLite. Each word stores its ordered phonemes as a JSON-encoded array of strings, so phonemes such as `tʃ` and `dʒ` remain single sound units rather than being split into characters. Deleting an activity cascades to its words.
+## API
 
-| Method | Route | Purpose |
+| Method | Route | Result |
 | --- | --- | --- |
-| `GET` | `/health` | Check the application and database; returns 200 when healthy |
-| `GET` | `/api/activities` | List saved activities; optionally filter with `?type=WORDLE` |
-| `POST` | `/api/activities` | Validate and create an activity and word list |
-| `GET` | `/api/activities/:id` | Retrieve one complete activity |
-| `PUT` | `/api/activities/:id` | Validate and replace its settings and words |
-| `DELETE` | `/api/activities/:id` | Delete an activity and its words |
-| `GET` | `/api/activities/:id/download` | Generate playable HTML directly from the stored record |
-| `POST` | `/api/download` | Return the current database-loaded preview as standalone HTML |
+| `GET` | `/health` | Returns 200 when the app can query its database |
+| `GET` | `/api/activities` | Lists activities; accepts `?type=WORDLE` or `WORD_SEARCH` |
+| `POST` | `/api/activities` | Validates and creates an activity and its words |
+| `GET` | `/api/activities/:id` | Retrieves one activity and its ordered words |
+| `PUT` | `/api/activities/:id` | Validates and replaces settings and words |
+| `DELETE` | `/api/activities/:id` | Deletes the activity; related words cascade |
+| `GET` | `/api/activities/:id/download` | Generates playable HTML from stored data |
+| `POST` | `/api/download` | Downloads an unsaved preview example |
 
-The `/activities` screen demonstrates the complete teacher CRUD workflow. Both builders can load a saved activity and generate their preview and download from its stored words and settings. Zod validates incoming payloads before Prisma writes to the database.
+Successful creation returns `201`; successful deletion returns `204`. Invalid input returns `400`, missing records return `404`, malformed stored phonemes return `422`, and unexpected failures return `500`.
+
+## Data model
+
+An `Activity` stores its title, type, difficulty, grid size, hint preference, and timestamps. Each related `Word` stores the written word, hint, position, target flag, and phonemes. Phonemes are JSON-encoded arrays of strings so one sound can contain multiple Unicode characters without being split.
+
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the schema diagram, request flow, validation rules, and design decisions.
 
 ## Docker
 
-Build and run the complete application with a persistent SQLite volume:
-
-```bash
-docker build -t phoneme-activity-builder .
-docker run --name phoneme-builder -p 3000:3000 -v phoneme-data:/data phoneme-activity-builder
+```powershell
+docker build -t phoneme-activity-builder:assessment2 .
+docker run --name phoneme-builder-assessment2 -p 3000:3000 -v phoneme-activity-data:/data phoneme-activity-builder:assessment2
 ```
 
-Open `http://localhost:3000` and verify `http://localhost:3000/health`. Container startup applies committed Prisma migrations and adds demonstration records only when the database is empty.
+Open `http://localhost:3000` and `/health`. Startup applies migrations, seeds an empty database, and stores SQLite data in the named volume. This workflow has been verified through a container restart.
 
-Run the production and code-quality checks:
+## Supporting assessment documents
 
-```bash
-npm run lint
-npm run build
-npm run start
-```
+- [Architecture and design](docs/ARCHITECTURE.md)
+- [APA 7 references](docs/REFERENCES.md)
+- [Video walkthrough script](docs/VIDEO_SCRIPT.md)
+- [Submission checklist](docs/SUBMISSION_CHECKLIST.md)
 
-## Project structure
+## Known limitations
 
-```text
-src/
-├── app/
-│   ├── about/          Project and author information
-│   ├── api/download/   Standalone HTML download endpoint
-│   ├── settings/       Theme and layout preferences
-│   ├── word-search/    Word Search page
-│   ├── wordle/         Wordle page
-│   ├── globals.css     Responsive and theme styling
-│   ├── layout.tsx      Root application layout
-│   └── page.tsx        Home page
-├── components/
-│   ├── DownloadButton.tsx
-│   ├── SiteShell.tsx
-│   ├── WordSearchBuilder.tsx
-│   └── WordleBuilder.tsx
-└── lib/
-    └── wordSearch.ts   Puzzle generation and shared phoneme hints
-```
+- Authentication and per-teacher accounts are outside scope.
+- SQLite suits this single-container teaching tool; a multi-user deployment would benefit from PostgreSQL.
+- Downloaded files do not report student results to the server.
+- The app validates IPA structure but cannot determine clinical suitability.
+- Modern browser support is assumed.
 
-The shared site shell provides consistent navigation, structure, and footer content. Each activity builder owns its settings and preview state. The download component converts the selected settings into a self-contained HTML document. Shared Word Search utilities keep puzzle generation and phoneme hints consistent.
+## Submission
 
-## Usability and accessibility
-
-The interface is designed for teachers preparing classroom activities. Settings and the live preview appear together so teachers can immediately see the effect of their choices.
-
-Accessibility considerations include:
-
-- Semantic headings, navigation, forms, fieldsets, and buttons
-- A skip link for keyboard and screen-reader users
-- Visible keyboard focus indicators
-- Keyboard-operable game controls
-- Form labels and accessible names for phoneme cells
-- Live status feedback during gameplay
-- Text feedback alongside colour-based feedback
-- High-contrast light and dark themes
-- Responsive layouts for narrow screens
-- Reduced-motion support
-- Hover labels explaining equivalence, such as `/θ/ — TH as in thin`
-
-## Design decisions and trade-offs
-
-The visual design uses a restrained classroom-oriented layout with clear typography, generous spacing, and a limited colour palette. Builder controls and playable previews sit beside each other on large screens and stack on mobile devices.
-
-Assessment 1 intentionally uses a small fixed collection of phoneme words. This keeps the work focused on frontend design while leaving clear extension points for database-driven word management in later assessments. Generated activities use inline CSS and JavaScript so each download remains a single portable HTML file. This makes the generator component larger, but allows teachers to use activities without hosting, installation, or an internet connection.
-
-## Current limitations
-
-- Phoneme words are defined in the frontend source code
-- There is no database, authentication, or saved activity library
-- Word Search supports a fixed set of five target words
-- Downloaded activities do not store or report student results
-- Modern browser support is assumed
-
-These limitations match the frontend-only scope of Assessment 1.
-
-## Using a generated activity
-
-1. Open the Wordle or Word Search builder.
-2. Choose the activity settings.
-3. Test the activity in the live preview.
-4. Select **Generate & download HTML**.
-5. Open the downloaded `.html` file in a modern browser.
-
-The generated file contains its own structure, styling, and gameplay code. It does not require the Next.js application to remain running.
-
-## Submission notes
-
-Exclude generated dependency and build directories such as `node_modules` and `.next` from the submitted ZIP. The assessment submission also includes the GitHub repository link and a 6–8 minute demonstration video.
+Do not include `.env`, `.db` files, `node_modules`, `.next`, test reports, or editor metadata in the ZIP. Include the GitHub link, video, required AI acknowledgement, and APA 7 references.
