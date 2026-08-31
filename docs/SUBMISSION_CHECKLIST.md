@@ -19,7 +19,8 @@
 - [ ] Demonstrate both builders and downloads using stored data.
 - [ ] Show `/health` and Docker.
 - [ ] Show `git log --oneline --decorate --graph --all` and explain the development milestones.
-- [ ] Export the final walkthrough to `public/walkthrough.mp4` with captions at `public/walkthrough.vtt`, then confirm it plays on `/about`.
+- [x] Include the final walkthrough at `public/walkthrough.mkv` and confirm it plays on `/about`.
+- [ ] Add accessible captions at `public/walkthrough.vtt`.
 
 ## Written and administrative work
 
