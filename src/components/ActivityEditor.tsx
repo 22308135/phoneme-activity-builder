@@ -8,12 +8,12 @@ import type { SavedActivity, SavedWord } from "@/lib/activityTypes";
 type EditableWord = SavedWord & { phonemeText: string };
 type Editor = { title: string; type: "WORDLE" | "WORD_SEARCH"; difficulty: "FOUNDATION" | "DEVELOPING" | "EXTENDING"; gridSize: number; hintEnabled: boolean; words: EditableWord[] };
 const blankWord = (target = false): EditableWord => ({ text: "", phonemes: [], phonemeText: "", hint: "", isTarget: target });
-const blankEditor = (): Editor => ({ title: "", type: "WORDLE", difficulty: "FOUNDATION", gridSize: 7, hintEnabled: true, words: [blankWord(true)] });
+const blankEditor = (type: Editor["type"] = "WORDLE"): Editor => ({ title: "", type, difficulty: "FOUNDATION", gridSize: 7, hintEnabled: true, words: [blankWord(type === "WORDLE")] });
 const fromSaved = (activity: SavedActivity): Editor => ({ title: activity.title, type: activity.type, difficulty: activity.difficulty, gridSize: activity.gridSize ?? 7, hintEnabled: activity.hintEnabled, words: activity.words.map((word) => ({ ...word, phonemeText: word.phonemes.join(", ") })) });
 
-export function ActivityEditor({ activityId }: { activityId?: number }) {
+export function ActivityEditor({ activityId, initialType = "WORDLE" }: { activityId?: number; initialType?: Editor["type"] }) {
   const router = useRouter();
-  const [editor, setEditor] = useState<Editor>(blankEditor);
+  const [editor, setEditor] = useState<Editor>(() => blankEditor(initialType));
   const [message, setMessage] = useState(activityId ? "Loading activity…" : "");
   const [busy, setBusy] = useState(Boolean(activityId));
 
@@ -36,7 +36,7 @@ export function ActivityEditor({ activityId }: { activityId?: number }) {
   };
 
   return <section className="editor-page">
-    <div className="editor-page-heading"><div><p className="eyebrow">Activity library</p><h1>{activityId ? "Edit activity" : "Create activity"}</h1><p className="lead">Add the words, ordered phonemes and classroom settings for this activity.</p></div><Link className="button secondary" href="/activities">Back to activities</Link></div>
+    <div className="editor-page-heading"><div><p className="eyebrow">Activity setup</p><h1>{activityId ? "Edit activity" : "Create activity"}</h1><p className="lead">Enter custom words and phonemes, then choose how the activity should work.</p></div><Link className="button secondary" href="/activities">Back to library</Link></div>
     <form className="editor-card standalone-editor" onSubmit={save} aria-busy={busy}>
       <label>Activity title<input required maxLength={120} value={editor.title} onChange={(event) => setEditor({ ...editor, title: event.target.value })} /></label>
       <div className="form-row"><label>Activity type<select value={editor.type} onChange={(event) => { const type = event.target.value as Editor["type"]; setEditor({ ...editor, type, words: editor.words.map((word, index) => ({ ...word, isTarget: type === "WORDLE" && index === 0 })) }); }}><option value="WORDLE">Wordle</option><option value="WORD_SEARCH">Word Search</option></select></label>

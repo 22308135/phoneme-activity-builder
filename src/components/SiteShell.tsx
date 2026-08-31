@@ -6,7 +6,7 @@ import { useState } from "react";
 
 const links = [
   ["Home", "/"],
-  ["Saved Activities", "/activities"],
+  ["Activities", "/activities"],
   ["Wordle", "/wordle"],
   ["Word Search", "/word-search"],
 ];
@@ -23,7 +23,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         <span>Phoneme Play <small>builder</small></span>
       </Link>
       <nav className="primary-nav" aria-label="Main navigation">
-        {links.map(([label, href]) => <Link key={href} href={href} aria-current={pathname === href ? "page" : undefined}>{label}</Link>)}
+        {links.map(([label, href]) => <Link key={href} href={href} aria-current={pathname === href || (href === "/activities" && pathname.startsWith("/activities/")) ? "page" : undefined}>{label}</Link>)}
       </nav>
       <div className="menu-wrap">
         <button className="menu-button" aria-expanded={open} aria-controls="more-menu" onClick={() => setOpen(!open)}>Menu <span aria-hidden="true">☰</span></button>
