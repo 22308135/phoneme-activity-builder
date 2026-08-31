@@ -47,7 +47,7 @@ npm run dev
 
 Open `http://localhost:3000`. Local setup synchronizes the schema and then runs the idempotent seed. Docker and production use the committed migration history through `db:deploy`.
 
-The assessed walkthrough is embedded from `public/walkthrough.mkv`. Add captions at `public/walkthrough.vtt`; a hosted MP4 can instead be supplied through `NEXT_PUBLIC_WALKTHROUGH_VIDEO_URL`.
+The assessed walkthrough is embedded from `public/walkthrough.mp4`. Add captions at `public/walkthrough.vtt`; a hosted MP4 can instead be supplied through `NEXT_PUBLIC_WALKTHROUGH_VIDEO_URL`.
 
 ## Quality checks
 
