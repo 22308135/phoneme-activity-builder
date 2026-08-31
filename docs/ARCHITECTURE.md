@@ -50,7 +50,7 @@ erDiagram
 
 1. A teacher enters settings and words on `/activities`.
 2. The client submits JSON to a collection or item API.
-3. Zod checks strings, enums, phoneme arrays, target rules, and Word Search minimums.
+3. Dedicated create and edit routes submit the editor payload; Zod checks strings, enums, phoneme arrays, target rules, and Word Search minimums.
 4. Prisma persists the activity and nested words.
 5. Builders retrieve saved activities using a type filter.
 6. A saved download supplies only the activity ID.

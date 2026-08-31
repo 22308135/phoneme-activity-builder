@@ -26,17 +26,20 @@ test("health, CRUD, phonemes, and stored download work", async ({ request }, tes
 
 test("teacher can create, edit, and delete through the interface", async ({ page }) => {
   await page.goto("/activities");
+  await page.getByRole("link", { name: "New activity" }).click();
+  await expect(page).toHaveURL(/\/activities\/new$/);
   await page.getByLabel("Activity title").fill("UI walkthrough activity");
   await page.getByLabel("Written word").fill("chip");
   await page.getByLabel("Ordered phonemes").fill("tʃ, ɪ, p");
   await page.getByLabel("Hint", { exact: true }).fill("A small piece");
   await page.getByRole("button", { name: "Create activity" }).click();
-  await expect(page.getByRole("status")).toContainText("Activity created");
+  await expect(page).toHaveURL(/\/activities$/);
   const card = page.locator(".saved-list article").filter({ hasText: "UI walkthrough activity" });
-  await card.getByRole("button", { name: "Edit" }).click();
+  await card.getByRole("link", { name: "Edit" }).click();
+  await expect(page).toHaveURL(/\/activities\/\d+\/edit$/);
   await page.getByLabel("Activity title").fill("UI walkthrough updated");
   await page.getByRole("button", { name: "Save changes" }).click();
-  await expect(page.getByRole("status")).toContainText("Activity updated");
+  await expect(page).toHaveURL(/\/activities$/);
   const updated = page.locator(".saved-list article").filter({ hasText: "UI walkthrough updated" });
   page.on("dialog", (dialog) => dialog.accept());
   await updated.getByRole("button", { name: "Delete" }).click();
@@ -44,7 +47,7 @@ test("teacher can create, edit, and delete through the interface", async ({ page
 });
 
 test("key pages have no serious automated accessibility violations", async ({ page }) => {
-  for (const route of ["/", "/about", "/settings", "/activities", "/wordle", "/word-search"]) {
+  for (const route of ["/", "/about", "/settings", "/activities", "/activities/new", "/wordle", "/word-search"]) {
     await page.goto(route);
     await page.addScriptTag({ content: axe.source });
     const results = await page.evaluate(async () => await (window as typeof window & { axe: { run: () => Promise<{ violations: Array<{ impact: string | null; id: string }> }> } }).axe.run());
