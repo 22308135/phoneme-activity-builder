@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createGameHtml } from "@/components/DownloadButton";
+import { createGameHtml } from "@/lib/gameHtml";
 import { parsePhonemes } from "@/lib/activity";
 import { prisma } from "@/lib/prisma";
 import { generateWordSearch } from "@/lib/wordSearch";

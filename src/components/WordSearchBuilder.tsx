@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { DownloadButton } from "./DownloadButton";
 import { generateWordSearch, WORD_SEARCH_HINTS } from "@/lib/wordSearch";
 import type { SavedActivity } from "@/lib/activityTypes";
@@ -71,7 +72,7 @@ export function WordSearchBuilder() {
   return <section className="builder-grid">
     <aside className="control-panel" aria-label="Word Search settings">
       <p className="eyebrow">Activity settings</p><h1>Build a phoneme Word Search</h1>
-      <div className="saved-source"><label>Load saved activity<select value={activityId} onChange={(event) => { const activity = activities.find((item) => item.id === Number(event.target.value)); if (activity) applyActivity(activity); }}><option value="">Assessment 1 examples</option>{activities.map((activity) => <option key={activity.id} value={activity.id}>{activity.title}</option>)}</select></label></div>
+      <div className="saved-source"><label>Load saved activity<select value={activityId} onChange={(event) => { const activity = activities.find((item) => item.id === Number(event.target.value)); if (activity) applyActivity(activity); }}><option value="">Example words</option>{activities.map((activity) => <option key={activity.id} value={activity.id}>{activity.title}</option>)}</select></label><Link className="builder-create-link" href="/activities">Enter your own words and phonemes →</Link></div>
       <label>Grid size<select value={gridSize} onChange={(event) => { setGridSize(Number(event.target.value)); setPuzzleSeed((seed) => seed + 1); setStart(null); setFound([]); setFoundCells([]); setMessage("New grid generated. Click the first and last sound in a word."); }}><option value="7">7 × 7</option><option value="8">8 × 8</option><option value="9">9 × 9</option></select></label>
       <fieldset><legend>Target words</legend>{phonemeWords.map((word) => <label className="check-row" key={word.id}><input type="checkbox" checked={enabled.includes(word.id)} disabled={enabled.includes(word.id) && enabled.length === 1} onChange={() => toggleWord(word.id)} /> {displaySounds(word.sounds)} · {word.id}</label>)}</fieldset>
       <div className="tip"><strong>Mixed directions</strong><br />Words run horizontally, vertically, diagonally and backwards. Click the first and last sound to select one.</div>
@@ -79,7 +80,7 @@ export function WordSearchBuilder() {
     </aside>
     <section className="preview-card" aria-label="Live Word Search preview"><div className="preview-bar"><span>Live playable preview</span><span className="status-dot">● {found.length === activeWords.length && activeWords.length > 0 ? "Complete" : `${found.length} of ${activeWords.length} found`}</span></div><div className="game-preview">
       <p className="game-label">Phoneme Word Search</p><h2>Find the sound patterns</h2><p className="hint">Search across, down, diagonally and backwards. Click the first and last sound in each word.</p>
-      <div className="search-grid" role="group" aria-label={`${gridSize} by ${gridSize} phoneme word search`} style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}>{grid.flat().map((sound, index) => <button type="button" title={`/${sound}/ — ${WORD_SEARCH_HINTS[sound]}`} aria-label={`/${sound}/, ${WORD_SEARCH_HINTS[sound]}`} aria-pressed={start === index || foundCells.includes(index)} className={`${start === index ? "selected" : ""} ${foundCells.includes(index) ? "found" : ""}`} key={`${sound}-${index}`} onClick={() => selectCell(index)}>/{sound}/</button>)}</div>
+      <div className="search-grid" role="group" aria-label={`${gridSize} by ${gridSize} phoneme word search`} style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}>{grid.flat().map((sound, index) => <button type="button" data-hint={WORD_SEARCH_HINTS[sound]} aria-label={`/${sound}/, ${WORD_SEARCH_HINTS[sound]}`} aria-pressed={start === index || foundCells.includes(index)} className={`phoneme-help ${start === index ? "selected" : ""} ${foundCells.includes(index) ? "found" : ""}`} key={`${sound}-${index}`} onClick={() => selectCell(index)}>/{sound}/</button>)}</div>
       <p className={`instruction ${found.length === activeWords.length && activeWords.length > 0 ? "completion-status complete" : ""}`} role="status">{message}</p><h3>Words to find</h3>
       <ul className="word-list">{activeWords.map((word) => <li className={found.includes(word.id) ? "found-word" : ""} key={word.id}>{displaySounds(word.sounds)} <small>{word.id}</small></li>)}</ul>
       <button type="button" className="button secondary reset-button" onClick={resetGame}>Reset activity</button>

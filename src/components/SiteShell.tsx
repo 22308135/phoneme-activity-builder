@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const links = [
   ["Home", "/"],
@@ -14,13 +14,6 @@ const links = [
 export function SiteShell({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-
-  useEffect(() => {
-    const theme = document.cookie.match(/(?:^|; )phoneme-theme=([^;]*)/)?.[1] || "light";
-    document.documentElement.dataset.theme = theme;
-    const compact = document.cookie.match(/(?:^|; )phoneme-layout=([^;]*)/)?.[1] === "compact";
-    document.documentElement.dataset.layout = compact ? "compact" : "comfortable";
-  }, []);
 
   return <div className="site-shell">
     <a className="skip-link" href="#main-content">Skip to main content</a>

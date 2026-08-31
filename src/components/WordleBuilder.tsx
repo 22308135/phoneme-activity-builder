@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { DownloadButton } from "./DownloadButton";
 import type { SavedActivity } from "@/lib/activityTypes";
 
@@ -61,7 +62,7 @@ export function WordleBuilder() {
 
   return <section className="builder-grid">
     <aside className="control-panel" aria-label="Wordle settings"><p className="eyebrow">Activity settings</p><h1>Build a phoneme Wordle</h1>
-      <div className="saved-source"><label>Load saved activity<select value={activityId} onChange={(event) => { const activity = activities.find((item) => item.id === Number(event.target.value)); if (activity) applyActivity(activity); }}><option value="">Assessment 1 examples</option>{activities.map((activity) => <option key={activity.id} value={activity.id}>{activity.title}</option>)}</select></label></div>
+      <div className="saved-source"><label>Load saved activity<select value={activityId} onChange={(event) => { const activity = activities.find((item) => item.id === Number(event.target.value)); if (activity) applyActivity(activity); }}><option value="">Example words</option>{activities.map((activity) => <option key={activity.id} value={activity.id}>{activity.title}</option>)}</select></label><Link className="builder-create-link" href="/activities">Enter your own words and phonemes →</Link></div>
       <label>Target phoneme word<select value={index} onChange={(event) => changeTarget(Number(event.target.value))}>{options.map((option, optionIndex) => <option value={optionIndex} key={option.word}>/{option.phonemes.join("/ /")}/ · {option.word}</option>)}</select></label>
       <label>Difficulty<select value={difficulty} onChange={(event) => changeDifficulty(event.target.value as Difficulty)}><option>Foundation</option><option>Developing</option><option>Extending</option></select></label>
       <div className="tip"><strong>{difficulty}</strong><br />{config.attempts} attempts · {config.keyCount} sound keys · hint {config.hint}.</div>
@@ -72,7 +73,7 @@ export function WordleBuilder() {
       {difficulty !== "Extending" && (showHint ? <p className="hint">Hint: {choice.hint}</p> : <button type="button" className="text-button" onClick={() => setShowHint(true)}>Show hint</button>)}
       <div className="wordle-board" role="group" style={{ gridTemplateColumns: `repeat(${choice.phonemes.length}, 64px)` }} aria-label="Phoneme guesses">{Array.from({ length: config.attempts }, (_, row) => Array.from({ length: choice.phonemes.length }, (__, column) => { const guess = guesses[row]; const sound = guess?.sounds[column] ?? (row === guesses.length ? current[column] : ""); const state = guess?.result[column] ?? ""; return <div className={`wordle-cell ${state}`} key={`${row}-${column}`}>{sound && `/${sound}/`}</div>; }))}</div>
       <p className={`instruction ${won ? "completion-status complete" : gameOver ? "completion-status unsuccessful" : ""}`} role="status">{message}</p>
-      <div className="phoneme-keyboard" aria-label="Phoneme keyboard">{keys.map((sound) => <button type="button" key={sound} title={`/${sound}/ — ${soundHints[sound]}`} disabled={gameOver} onClick={() => addSound(sound)}>/{sound}/</button>)}<button type="button" className="action-key" disabled={gameOver} onClick={submitGuess}>Enter</button><button type="button" className="action-key" disabled={gameOver} aria-label="Delete last phoneme" onClick={() => setCurrent(current.slice(0, -1))}>⌫</button></div>
+      <div className="phoneme-keyboard" aria-label="Phoneme keyboard">{keys.map((sound) => <button type="button" className="phoneme-help" data-hint={soundHints[sound]} key={sound} aria-label={`/${sound}/, ${soundHints[sound]}`} disabled={gameOver} onClick={() => addSound(sound)}>/{sound}/</button>)}<button type="button" className="action-key" disabled={gameOver} onClick={submitGuess}>Enter</button><button type="button" className="action-key" disabled={gameOver} aria-label="Delete last phoneme" onClick={() => setCurrent(current.slice(0, -1))}>⌫</button></div>
       <button type="button" className="button secondary reset-button" onClick={resetGame}>{gameOver ? "Play again" : "Reset game"}</button>
     </div></section>
   </section>;

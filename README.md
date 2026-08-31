@@ -11,6 +11,8 @@ Phoneme Play Builder is a database-backed Next.js application for Speech Patholo
 ## Assessment features
 
 - Teacher-facing create, read, update, and delete workflow at `/activities`
+- Teacher-entered words, ordered phonemes, English labels, and hints rather than fixed activity-only content
+- System, Light, and Dark themes plus Comfortable and Compact layouts, synchronised through a shared preference provider and one-year cookies
 - Ordered IPA phoneme storage, including multi-character units such as `tʃ` and `dʒ`
 - Multiple saved Wordle and Word Search configurations
 - Difficulty, hints, target words, grid size, and timestamps stored in SQLite
@@ -44,6 +46,8 @@ npm run dev
 ```
 
 Open `http://localhost:3000`. Local setup synchronizes the schema and then runs the idempotent seed. Docker and production use the committed migration history through `db:deploy`.
+
+To embed the assessed walkthrough on the About page, add `public/walkthrough.mp4` and its captions at `public/walkthrough.vtt`. A hosted video file can instead be supplied through `NEXT_PUBLIC_WALKTHROUGH_VIDEO_URL`.
 
 ## Quality checks
 
@@ -92,6 +96,7 @@ Open `http://localhost:3000` and `/health`. Startup applies migrations, seeds an
 - [APA 7 references](docs/REFERENCES.md)
 - [Video walkthrough script](docs/VIDEO_SCRIPT.md)
 - [Submission checklist](docs/SUBMISSION_CHECKLIST.md)
+- [Git development history](docs/GIT_HISTORY.md)
 
 ## Known limitations
 

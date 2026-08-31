@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createGameHtml } from "@/components/DownloadButton";
+import { createGameHtml } from "@/lib/gameHtml";
 import { generateWordSearch } from "@/lib/wordSearch";
 
 function containsWord(grid: string[][], word: string[]) {

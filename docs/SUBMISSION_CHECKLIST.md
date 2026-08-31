@@ -18,6 +18,8 @@
 - [ ] Demonstrate word/activity CRUD.
 - [ ] Demonstrate both builders and downloads using stored data.
 - [ ] Show `/health` and Docker.
+- [ ] Show `git log --oneline --decorate --graph --all` and explain the development milestones.
+- [ ] Export the final walkthrough to `public/walkthrough.mp4` with captions at `public/walkthrough.vtt`, then confirm it plays on `/about`.
 
 ## Written and administrative work
 
@@ -26,6 +28,7 @@
 - [ ] Complete the unit’s official AI acknowledgement form.
 - [ ] Add the final GitHub repository URL.
 - [ ] Confirm repository visibility matches unit instructions.
+- [ ] Confirm the submitted ZIP and presentation both expose inspectable Git history or the repository link.
 
 ## ZIP audit
 

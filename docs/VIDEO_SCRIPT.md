@@ -57,5 +57,6 @@ docker ps
 ## 6:40–7:20 — conclusion
 
 - Show `npm run check` and `npm run test:browser`.
+- Show `git log --oneline --decorate --graph --all` and explain at least three development milestones rather than only stating that commits exist.
 - Mention desktop/mobile and axe accessibility checks.
 - Summarize that multiple stored configurations drive both activity types and downloads.

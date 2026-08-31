@@ -44,10 +44,20 @@ test("teacher can create, edit, and delete through the interface", async ({ page
 });
 
 test("key pages have no serious automated accessibility violations", async ({ page }) => {
-  for (const route of ["/", "/activities", "/wordle", "/word-search"]) {
+  for (const route of ["/", "/about", "/settings", "/activities", "/wordle", "/word-search"]) {
     await page.goto(route);
     await page.addScriptTag({ content: axe.source });
     const results = await page.evaluate(async () => await (window as typeof window & { axe: { run: () => Promise<{ violations: Array<{ impact: string | null; id: string }> }> } }).axe.run());
     expect(results.violations.filter((violation) => violation.impact === "serious" || violation.impact === "critical"), route).toEqual([]);
   }
+});
+
+test("system theme and layout preferences persist in cookies", async ({ page }) => {
+  await page.goto("/settings");
+  await page.getByLabel("Light").check();
+  await page.getByLabel("System").check();
+  await page.getByLabel("Compact").check();
+  const cookies = await page.context().cookies();
+  expect(cookies.find((cookie) => cookie.name === "phoneme-theme")?.value).toBe("system");
+  expect(cookies.find((cookie) => cookie.name === "phoneme-layout")?.value).toBe("compact");
 });
