@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { SavedActivity } from "@/lib/activityTypes";
+import { buildWordleKeys } from "@/lib/wordleKeys";
 
 type Difficulty = "Foundation" | "Developing" | "Extending";
 type Guess = { sounds: string[]; result: ("correct" | "present" | "absent")[] };
@@ -11,7 +12,6 @@ const defaultOptions: DictionaryOption[] = [
   { phonemes: ["ʃ", "ɪ", "p"], word: "ship", hint: "It travels on water" },
   { phonemes: ["tʃ", "ɪ", "p"], word: "chip", hint: "A small piece, or a snack" },
 ];
-const allKeys = ["θ", "ʃ", "tʃ", "dʒ", "ŋ", "ɪ", "æ", "n", "p", "m", "t", "k"];
 const soundHints: Record<string, string> = { θ: "TH as in thin", ʃ: "SH as in ship", tʃ: "CH as in chip", dʒ: "J as in jam", ŋ: "NG as in sing", ɪ: "I as in sit", æ: "A as in cat", n: "N as in nose", p: "P as in pen", m: "M as in map", t: "T as in top", k: "K as in kite" };
 const settings = { Foundation: { attempts: 6, keyCount: 6, hint: "shown" }, Developing: { attempts: 5, keyCount: 9, hint: "optional" }, Extending: { attempts: 4, keyCount: 12, hint: "hidden" } } as const;
 
@@ -27,7 +27,7 @@ export function WordleBuilder() {
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
   const choice = options[index], config = settings[difficulty];
-  const keys = [...new Set([...choice.phonemes, ...allKeys])].slice(0, config.keyCount);
+  const keys = buildWordleKeys(choice.phonemes, config.keyCount, `${choice.word}-${difficulty}`);
   const won = guesses.some((guess) => guess.result.every((state) => state === "correct"));
   const gameOver = won || guesses.length >= config.attempts;
 
@@ -81,7 +81,7 @@ export function WordleBuilder() {
       {difficulty !== "Extending" && (showHint ? <p className="hint">Hint: {choice.hint}</p> : <button type="button" className="text-button" onClick={() => setShowHint(true)}>Show hint</button>)}
       <div className="wordle-board" role="group" style={{ gridTemplateColumns: `repeat(${choice.phonemes.length}, 64px)` }} aria-label="Phoneme guesses">{Array.from({ length: config.attempts }, (_, row) => Array.from({ length: choice.phonemes.length }, (__, column) => { const guess = guesses[row]; const sound = guess?.sounds[column] ?? (row === guesses.length ? current[column] : ""); const state = guess?.result[column] ?? ""; return <div className={`wordle-cell ${state}`} key={`${row}-${column}`}>{sound && `/${sound}/`}</div>; }))}</div>
       <p className={`instruction ${won ? "completion-status complete" : gameOver ? "completion-status unsuccessful" : ""}`} role="status">{message}</p>
-      <div className="phoneme-keyboard" aria-label="Phoneme keyboard">{keys.map((sound) => <button type="button" className="phoneme-help" data-hint={soundHints[sound]} key={sound} aria-label={`/${sound}/, ${soundHints[sound]}`} disabled={gameOver} onClick={() => addSound(sound)}>/{sound}/</button>)}<button type="button" className="action-key" disabled={gameOver} onClick={submitGuess}>Enter</button><button type="button" className="action-key" disabled={gameOver} aria-label="Delete last phoneme" onClick={() => setCurrent(current.slice(0, -1))}>⌫</button></div>
+      <div className="phoneme-keyboard" aria-label="Phoneme keyboard">{keys.map((sound) => { const explanation = soundHints[sound] ?? `Phoneme ${sound}`; return <button type="button" className="phoneme-help" data-hint={explanation} key={sound} aria-label={`/${sound}/, ${explanation}`} disabled={gameOver} onClick={() => addSound(sound)}>/{sound}/</button>; })}<button type="button" className="action-key" disabled={gameOver} onClick={submitGuess}>Enter</button><button type="button" className="action-key" disabled={gameOver} aria-label="Delete last phoneme" onClick={() => setCurrent(current.slice(0, -1))}>⌫</button></div>
       <button type="button" className="button secondary reset-button" onClick={resetGame}>{gameOver ? "Play again" : "Reset game"}</button>
     </div></section>
   </section>;
