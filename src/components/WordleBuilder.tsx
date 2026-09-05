@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { DownloadButton } from "./DownloadButton";
 import type { SavedActivity } from "@/lib/activityTypes";
 
 type Difficulty = "Foundation" | "Developing" | "Extending";
 type Guess = { sounds: string[]; result: ("correct" | "present" | "absent")[] };
-const defaultOptions = [
+type DictionaryOption = { id?: number; phonemes: string[]; word: string; hint: string; source?: "curated" | "custom" };
+const defaultOptions: DictionaryOption[] = [
   { phonemes: ["θ", "ɪ", "n"], word: "thin", hint: "A slim shape or object" },
   { phonemes: ["ʃ", "ɪ", "p"], word: "ship", hint: "It travels on water" },
   { phonemes: ["tʃ", "ɪ", "p"], word: "chip", hint: "A small piece, or a snack" },
@@ -17,7 +16,6 @@ const soundHints: Record<string, string> = { θ: "TH as in thin", ʃ: "SH as in 
 const settings = { Foundation: { attempts: 6, keyCount: 6, hint: "shown" }, Developing: { attempts: 5, keyCount: 9, hint: "optional" }, Extending: { attempts: 4, keyCount: 12, hint: "hidden" } } as const;
 
 export function WordleBuilder() {
-  const [activities, setActivities] = useState<SavedActivity[]>([]);
   const [activityId, setActivityId] = useState<number | "">("");
   const [options, setOptions] = useState(defaultOptions);
   const [index, setIndex] = useState(0);
@@ -26,30 +24,40 @@ export function WordleBuilder() {
   const [guesses, setGuesses] = useState<Guess[]>([]);
   const [message, setMessage] = useState("Choose the phoneme tiles in order.");
   const [showHint, setShowHint] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState("");
   const choice = options[index], config = settings[difficulty];
   const keys = [...new Set([...choice.phonemes, ...allKeys])].slice(0, config.keyCount);
   const won = guesses.some((guess) => guess.result.every((state) => state === "correct"));
   const gameOver = won || guesses.length >= config.attempts;
 
   const resetGame = () => { setCurrent([]); setGuesses([]); setMessage("Choose the phoneme tiles in order."); setShowHint(difficulty === "Foundation"); };
-  const changeTarget = (nextIndex: number) => { setIndex(nextIndex); setCurrent([]); setGuesses([]); setMessage("Choose the phoneme tiles in order."); };
-  const changeDifficulty = (next: Difficulty) => { setDifficulty(next); setCurrent([]); setGuesses([]); setMessage("Choose the phoneme tiles in order."); setShowHint(next === "Foundation"); };
+  const changeTarget = (nextIndex: number) => { setIndex(nextIndex); setActivityId(""); setSaveMessage(""); setCurrent([]); setGuesses([]); setMessage("Choose the phoneme tiles in order."); };
+  const changeDifficulty = (next: Difficulty, keepSaved = false) => { setDifficulty(next); if (!keepSaved) setActivityId(""); setSaveMessage(""); setCurrent([]); setGuesses([]); setMessage("Choose the phoneme tiles in order."); setShowHint(next === "Foundation"); };
   const applyActivity = (activity: SavedActivity) => {
     const nextOptions = activity.words.map((word) => ({ phonemes: word.phonemes, word: word.text, hint: word.hint ?? "No hint provided" }));
     if (!nextOptions.length) return;
     const targetIndex = Math.max(0, activity.words.findIndex((word) => word.isTarget));
-    setActivityId(activity.id); setOptions(nextOptions); setIndex(targetIndex);
-    changeDifficulty((activity.difficulty.charAt(0) + activity.difficulty.slice(1).toLowerCase()) as Difficulty);
+    setOptions(nextOptions); setIndex(targetIndex);
+    changeDifficulty((activity.difficulty.charAt(0) + activity.difficulty.slice(1).toLowerCase()) as Difficulty, true); setActivityId(activity.id);
   };
   useEffect(() => {
-    fetch("/api/activities?type=WORDLE", { cache: "no-store" }).then((response) => response.ok ? response.json() : Promise.reject()).then((saved: SavedActivity[]) => {
-      setActivities(saved);
-      const requested = Number(new URLSearchParams(window.location.search).get("activity"));
-      const selected = saved.find((activity) => activity.id === requested);
-      if (selected) applyActivity(selected);
+    const requested = Number(new URLSearchParams(window.location.search).get("activity"));
+    if (requested) { fetch(`/api/activities/${requested}`, { cache: "no-store" }).then((response) => response.ok ? response.json() : Promise.reject()).then((saved: SavedActivity) => applyActivity(saved)).catch(() => undefined); return; }
+    fetch("/api/dictionary", { cache: "no-store" }).then((response) => response.ok ? response.json() : Promise.reject()).then((entries: DictionaryOption[]) => {
+      if (entries.length) { setOptions(entries); setIndex(Math.max(0, entries.findIndex((entry) => entry.word === "thin"))); }
     }).catch(() => undefined);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const saveActivity = async (download: boolean) => {
+    setSaving(true); setSaveMessage("Saving to Activities…");
+    const payload = { title: `${choice.word[0].toUpperCase()}${choice.word.slice(1)} phoneme Wordle`, type: "WORDLE", difficulty: difficulty.toUpperCase(), gridSize: null, hintEnabled: difficulty !== "Extending", words: [{ text: choice.word, phonemes: choice.phonemes, hint: choice.hint, isTarget: true }] };
+    const response = await fetch(activityId ? `/api/activities/${activityId}` : "/api/activities", { method: activityId ? "PUT" : "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+    const result = await response.json(); setSaving(false);
+    if (!response.ok) { setSaveMessage(result?.issues?.[0]?.message ?? result.error ?? "Could not save activity."); return; }
+    setActivityId(result.id); setSaveMessage(download ? "Saved to Activities and download started." : "Saved to Activities.");
+    if (download) { const link = document.createElement("a"); link.href = `/api/activities/${result.id}/download`; link.click(); }
+  };
   const addSound = (sound: string) => { if (!gameOver && current.length < choice.phonemes.length) setCurrent([...current, sound]); };
   const submitGuess = () => {
     if (gameOver) return;
@@ -62,11 +70,11 @@ export function WordleBuilder() {
 
   return <section className="builder-grid">
     <aside className="control-panel" aria-label="Wordle settings"><p className="eyebrow">Activity settings</p><h1>Build a phoneme Wordle</h1>
-      <div className="saved-source"><label>Load saved activity<select value={activityId} onChange={(event) => { const activity = activities.find((item) => item.id === Number(event.target.value)); if (activity) applyActivity(activity); }}><option value="">Example words</option>{activities.map((activity) => <option key={activity.id} value={activity.id}>{activity.title}</option>)}</select></label><Link className="builder-create-link" href="#custom-activity">Create with your own words and phonemes →</Link></div>
       <label>Target phoneme word<select value={index} onChange={(event) => changeTarget(Number(event.target.value))}>{options.map((option, optionIndex) => <option value={optionIndex} key={option.word}>/{option.phonemes.join("/ /")}/ · {option.word}</option>)}</select></label>
       <label>Difficulty<select value={difficulty} onChange={(event) => changeDifficulty(event.target.value as Difficulty)}><option>Foundation</option><option>Developing</option><option>Extending</option></select></label>
       <div className="tip"><strong>{difficulty}</strong><br />{config.attempts} attempts · {config.keyCount} sound keys · hint {config.hint}.</div>
-      <DownloadButton activity="wordle" answer={choice.phonemes.join(" ")} hint={choice.hint} words={[choice.word]} difficulty={difficulty} savedActivityId={activityId || undefined} />
+      <div className="builder-actions"><button type="button" className="button secondary" disabled={saving} onClick={() => saveActivity(false)}>Save Wordle to Activities</button><button type="button" className="button primary" disabled={saving} onClick={() => saveActivity(true)}>Generate &amp; download HTML <span aria-hidden="true">↓</span></button></div>
+      <p className="save-message" role="status">{saveMessage}</p>
     </aside>
     <section className="preview-card" aria-label="Live Wordle preview"><div className="preview-bar"><span>Live playable preview</span><span className="status-dot">● {won ? "Complete" : gameOver ? "Finished" : `${guesses.length} of ${config.attempts} attempts`}</span></div><div className="game-preview wordle-game">
       <p className="game-label">Phoneme Wordle</p><h2>Listen. Look. Build the word.</h2>

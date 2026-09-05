@@ -3,7 +3,7 @@ export type WordSuggestion = {
   hint: string;
 };
 
-const suggestions: Record<string, WordSuggestion> = {
+export const phonemeDictionary: Record<string, WordSuggestion> = {
   bath: { phonemes: ["b", "aː", "θ"], hint: "A place to wash in water" },
   book: { phonemes: ["b", "ʊ", "k"], hint: "Something with pages to read" },
   cat: { phonemes: ["k", "æ", "t"], hint: "A small animal that says meow" },
@@ -33,9 +33,13 @@ const suggestions: Record<string, WordSuggestion> = {
 };
 
 export function findWordSuggestion(word: string) {
-  return suggestions[word.trim().toLocaleLowerCase("en-AU")] ?? null;
+  return phonemeDictionary[word.trim().toLocaleLowerCase("en-AU")] ?? null;
 }
 
 export function suggestionCount() {
-  return Object.keys(suggestions).length;
+  return Object.keys(phonemeDictionary).length;
+}
+
+export function dictionaryEntries() {
+  return Object.entries(phonemeDictionary).map(([word, details]) => ({ word, ...details, source: "curated" as const }));
 }

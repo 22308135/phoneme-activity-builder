@@ -7,6 +7,7 @@ import { useState } from "react";
 const links = [
   ["Home", "/"],
   ["Activities", "/activities"],
+  ["Word Dictionary", "/dictionary"],
   ["Wordle", "/wordle"],
   ["Word Search", "/word-search"],
 ];

@@ -53,7 +53,7 @@ Create this Wordle during the recording:
 
 ## 0:30–1:15 — frontend continuity and Assessment 1 feedback
 
-**On screen:** Briefly show Home, About, Settings, Wordle, Word Search and Activities. Show the embedded About video and the System, Light, Dark, Compact and Comfortable settings.
+**On screen:** Briefly show Home, About, Settings, Word Dictionary, Wordle, Word Search and Activities. Show the embedded About video and the System, Light, Dark, Compact and Comfortable settings.
 
 **Say:**
 
@@ -75,11 +75,11 @@ Create this Wordle during the recording:
 
 ### Create
 
-**On screen:** Open `/wordle`, follow **Create with your own words and phonemes** to the form beneath the preview, type `chip`, then leave the field to show its curated phonemes and hint populate automatically. Explain that both remain editable. Enter the rest of the demonstration data, use **Add word** for `ship`, and select **Save and load preview**.
+**On screen:** Open **Word Dictionary**, show the curated entries, then add a custom word with ordered phonemes and a hint. Open `/wordle`, select that word, choose a difficulty, and select **Save Wordle to Activities**.
 
 **Say:**
 
-> The builder keeps custom content entry beside the playable preview, while the Saved Puzzles page remains a reusable library. The local suggestion API has recognised chip from a curated offline dictionary and populated editable phonemes and a child-friendly hint. It never overwrites teacher-entered values, and unknown words remain fully editable. I will save a database-backed activity rather than use temporary values. Adding the second word also demonstrates creating related Word records.
+> The Word Dictionary combines a curated offline vocabulary with teacher-added database entries. Every entry supplies an ordered phoneme sequence and a child-friendly hint to the Wordle builder. Saving creates a database-backed activity, while the Saved Puzzles page remains a reusable download and management library.
 
 ### Read
 
@@ -125,7 +125,7 @@ Create this Wordle during the recording:
 
 ## 6:35–7:15 — validation and error handling
 
-**On screen:** Use the custom form on a builder page, submit an empty or incomplete form, and show the message. Then show `src/lib/activity.ts` and an API route.
+**On screen:** Use the Word Dictionary form, submit an empty or incomplete entry, and show browser validation. Then show `src/lib/activity.ts` and an API route.
 
 **Say:**
 
@@ -206,7 +206,7 @@ Open GitHub and show the commits. Point out `26505f6`, `2e35048`, `47a284d`, `65
 - [ ] Assessment 1 frontend and feedback improvements identified.
 - [ ] Activity and Word schema explained.
 - [ ] Multi-character `tʃ` storage explained.
-- [ ] Custom Wordle created with at least two words.
+- [ ] Custom dictionary word created and selected in Wordle.
 - [ ] Activity and individual word values read back.
 - [ ] Word added, edited and removed during update.
 - [ ] Updated values retrieved again.

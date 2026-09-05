@@ -21,7 +21,9 @@ Phoneme Play Builder is a database-backed Next.js application for Speech Patholo
 - Difficulty, hints, target words, grid size, and timestamps stored in SQLite
 - Zod validation before database writes
 - Prisma schema, migration history, seed data, and cascading word deletion
-- Live Wordle and Word Search previews driven by saved data
+- A reusable Word Dictionary with 26 curated entries plus teacher-added database entries
+- Live Wordle and Word Search previews driven by dictionary and saved data
+- Wordle HTML generation automatically saves the puzzle to the Activities library
 - Server-generated, standalone HTML downloads from saved activity IDs
 - Database-aware `GET /health` endpoint
 - Docker image with automatic migration, seed data, health check, and persistent volume
@@ -85,6 +87,8 @@ Unit tests cover schemas and activity generation. Browser tests check health, CR
 | `GET` | `/api/activities/:id/download` | Generates playable HTML from stored data |
 | `POST` | `/api/download` | Downloads an unsaved preview example |
 | `GET` | `/api/word-suggestions?word=chip` | Returns an editable suggestion from the local curated dictionary |
+| `GET`, `POST` | `/api/dictionary` | Lists all dictionary entries or adds/updates a custom entry |
+| `DELETE` | `/api/dictionary/:id` | Deletes a teacher-added dictionary entry |
 
 Successful creation returns `201`; successful deletion returns `204`. Invalid input returns `400`, missing records return `404`, malformed stored phonemes return `422`, and unexpected failures return `500`.
 
