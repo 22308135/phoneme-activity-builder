@@ -175,7 +175,7 @@ git status --short
 git log --oneline --decorate --graph --all
 ```
 
-Open GitHub and show the commits. Point out `26505f6`, `2e35048`, `47a284d`, `25e7b96`, and the latest commit.
+Open GitHub and show the commits. Point out `26505f6`, `2e35048`, `47a284d`, `65fc27c`, and the latest commit.
 
 **Say:**
 
