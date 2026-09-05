@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { activityInputSchema, parsePhonemes, prismaActivityData, serializeActivity } from "@/lib/activity";
+import { findWordSuggestion, suggestionCount } from "@/lib/phonemeDictionary";
 
 const validWordle = {
   title: "Initial sounds", type: "WORDLE" as const, difficulty: "FOUNDATION" as const, hintEnabled: true, gridSize: null,
@@ -28,5 +29,16 @@ describe("activity validation", () => {
     expect(parsePhonemes(data.words.create[0].phonemes)).toEqual(["tʃ", "ɪ", "p"]);
     expect(parsePhonemes("not json")).toEqual([]);
     expect(serializeActivity({ words: [{ phonemes: data.words.create[0].phonemes }] }).words[0].phonemes).toEqual(["tʃ", "ɪ", "p"]);
+  });
+});
+
+describe("curated word suggestions", () => {
+  it("returns editable phonemes and a child-friendly hint", () => {
+    expect(suggestionCount()).toBeGreaterThanOrEqual(25);
+    expect(findWordSuggestion(" Chip ")).toEqual({ phonemes: ["tʃ", "ɪ", "p"], hint: "A small piece" });
+  });
+
+  it("returns null for words outside the curated list", () => {
+    expect(findWordSuggestion("unlistedword")).toBeNull();
   });
 });

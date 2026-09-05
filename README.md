@@ -13,6 +13,7 @@ Phoneme Play Builder is a database-backed Next.js application for Speech Patholo
 
 - Teacher-facing activity library at `/activities`, with focused create and edit routes at `/activities/new` and `/activities/:id/edit`
 - Teacher-entered words, ordered phonemes, English labels, and hints rather than fixed activity-only content
+- Offline curated suggestions can populate editable ordered phonemes and child-friendly hints from a written word
 - System, Light, and Dark themes plus Comfortable and Compact layouts, synchronised through a shared preference provider and one-year cookies
 - Ordered IPA phoneme storage, including multi-character units such as `tʃ` and `dʒ`
 - Multiple saved Wordle and Word Search configurations
@@ -82,6 +83,7 @@ Unit tests cover schemas and activity generation. Browser tests check health, CR
 | `DELETE` | `/api/activities/:id` | Deletes the activity; related words cascade |
 | `GET` | `/api/activities/:id/download` | Generates playable HTML from stored data |
 | `POST` | `/api/download` | Downloads an unsaved preview example |
+| `GET` | `/api/word-suggestions?word=chip` | Returns an editable suggestion from the local curated dictionary |
 
 Successful creation returns `201`; successful deletion returns `204`. Invalid input returns `400`, missing records return `404`, malformed stored phonemes return `422`, and unexpected failures return `500`.
 

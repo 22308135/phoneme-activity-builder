@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import type { SavedActivity, SavedWord } from "@/lib/activityTypes";
 
 type EditableWord = SavedWord & { phonemeText: string };
@@ -16,6 +16,9 @@ export function ActivityEditor({ activityId, initialType = "WORDLE" }: { activit
   const [editor, setEditor] = useState<Editor>(() => blankEditor(initialType));
   const [message, setMessage] = useState(activityId ? "Loading activity…" : "");
   const [busy, setBusy] = useState(Boolean(activityId));
+  const [suggesting, setSuggesting] = useState<number | null>(null);
+  const [suggestionMessages, setSuggestionMessages] = useState<Record<number, string>>({});
+  const suggestionRequests = useRef(new Set<number>());
 
   useEffect(() => {
     if (!activityId) return;
@@ -26,6 +29,22 @@ export function ActivityEditor({ activityId, initialType = "WORDLE" }: { activit
   }, [activityId]);
 
   const updateWord = (index: number, patch: Partial<EditableWord>) => setEditor((current) => ({ ...current, words: current.words.map((word, wordIndex) => wordIndex === index ? { ...word, ...patch } : word) }));
+  const suggestWord = async (index: number) => {
+    const word = editor.words[index];
+    if (!word.text.trim() || suggestionRequests.current.has(index)) return;
+    suggestionRequests.current.add(index); setSuggesting(index);
+    try {
+      const response = await fetch(`/api/word-suggestions?word=${encodeURIComponent(word.text)}`);
+      const result = await response.json();
+      if (!response.ok) { setSuggestionMessages((current) => ({ ...current, [index]: result.error })); return; }
+      setEditor((current) => ({ ...current, words: current.words.map((item, wordIndex) => wordIndex === index ? { ...item, phonemeText: item.phonemeText.trim() || result.phonemes.join(", "), hint: item.hint?.trim() || result.hint } : item) }));
+      setSuggestionMessages((current) => ({ ...current, [index]: "Curated suggestion added. Please review before saving." }));
+    } catch {
+      setSuggestionMessages((current) => ({ ...current, [index]: "Could not load a suggestion." }));
+    } finally {
+      suggestionRequests.current.delete(index); setSuggesting(null);
+    }
+  };
   const save = async (event: FormEvent) => {
     event.preventDefault(); setBusy(true); setMessage("Saving…");
     const payload = { ...editor, gridSize: editor.type === "WORD_SEARCH" ? editor.gridSize : null, words: editor.words.map(({ text, phonemeText, hint, isTarget }) => ({ text, hint, isTarget: editor.type === "WORDLE" && isTarget, phonemes: phonemeText.split(/[,\s]+/u).map((sound) => sound.trim()).filter(Boolean) })) };
@@ -43,7 +62,7 @@ export function ActivityEditor({ activityId, initialType = "WORDLE" }: { activit
       {editor.type === "WORDLE" ? <label>Difficulty<select value={editor.difficulty} onChange={(event) => setEditor({ ...editor, difficulty: event.target.value as Editor["difficulty"] })}><option value="FOUNDATION">Foundation</option><option value="DEVELOPING">Developing</option><option value="EXTENDING">Extending</option></select></label> : <label>Grid size<select value={editor.gridSize} onChange={(event) => setEditor({ ...editor, gridSize: Number(event.target.value) })}><option value="7">7 × 7</option><option value="8">8 × 8</option><option value="9">9 × 9</option></select></label>}</div>
       <label className="check-row"><input type="checkbox" checked={editor.hintEnabled} onChange={(event) => setEditor({ ...editor, hintEnabled: event.target.checked })} /> Enable hints</label>
       <div className="word-editor-heading"><h2>Words and phonemes</h2><button type="button" className="text-button" onClick={() => setEditor({ ...editor, words: [...editor.words, blankWord()] })}>+ Add word</button></div><p className="field-help">Separate phonemes with spaces or commas. A sound such as tʃ remains one token.</p>
-      {editor.words.map((word, index) => <fieldset className="word-editor" key={index}><legend>Word {index + 1}</legend><label>Written word<input required value={word.text} onChange={(event) => updateWord(index, { text: event.target.value })} /></label><label>Ordered phonemes<input required placeholder="tʃ, ɪ, p" value={word.phonemeText} onChange={(event) => updateWord(index, { phonemeText: event.target.value })} /></label><label>Hint<input value={word.hint ?? ""} onChange={(event) => updateWord(index, { hint: event.target.value })} /></label><div className="word-actions">{editor.type === "WORDLE" && <label className="check-row"><input type="radio" name="target" checked={word.isTarget} onChange={() => setEditor({ ...editor, words: editor.words.map((item, itemIndex) => ({ ...item, isTarget: itemIndex === index })) })} /> Target word</label>}<button type="button" className="danger-link" disabled={editor.words.length === 1} onClick={() => setEditor({ ...editor, words: editor.words.filter((_, wordIndex) => wordIndex !== index) })}>Remove</button></div></fieldset>)}
+      {editor.words.map((word, index) => <fieldset className="word-editor" key={index}><legend>Word {index + 1}</legend><label>Written word<input required value={word.text} onChange={(event) => { updateWord(index, { text: event.target.value }); setSuggestionMessages((current) => ({ ...current, [index]: "" })); }} onBlur={() => suggestWord(index)} /></label><button type="button" className="suggest-button" disabled={!word.text.trim() || suggesting === index} onClick={() => suggestWord(index)} aria-describedby={`suggestion-${index}`}>{suggesting === index ? "Suggesting…" : `Suggest details for word ${index + 1}`}</button><p id={`suggestion-${index}`} className="suggestion-message" aria-live="polite">{suggestionMessages[index]}</p><label>Ordered phonemes<input required placeholder="tʃ, ɪ, p" value={word.phonemeText} onChange={(event) => updateWord(index, { phonemeText: event.target.value })} /></label><label>Hint<input value={word.hint ?? ""} onChange={(event) => updateWord(index, { hint: event.target.value })} /></label><div className="word-actions">{editor.type === "WORDLE" && <label className="check-row"><input type="radio" name="target" checked={word.isTarget} onChange={() => setEditor({ ...editor, words: editor.words.map((item, itemIndex) => ({ ...item, isTarget: itemIndex === index })) })} /> Target word</label>}<button type="button" className="danger-link" disabled={editor.words.length === 1} onClick={() => setEditor({ ...editor, words: editor.words.filter((_, wordIndex) => wordIndex !== index) })}>Remove</button></div></fieldset>)}
       <div className="form-actions"><button disabled={busy} className="button primary" type="submit">{activityId ? "Save changes" : "Create activity"}</button><Link className="button secondary" href="/activities">Cancel</Link></div><p role="status" className="form-message">{message}</p>
     </form>
   </section>;

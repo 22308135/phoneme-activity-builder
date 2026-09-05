@@ -75,11 +75,11 @@ Create this Wordle during the recording:
 
 ### Create
 
-**On screen:** Open `/activities`, select **New activity**, enter the demonstration data, use **Add word** for `ship`, and submit.
+**On screen:** Open `/activities`, select **New activity**, type `chip`, then leave the field to show its curated phonemes and hint populate automatically. Explain that both remain editable. Enter the rest of the demonstration data, use **Add word** for `ship`, and submit.
 
 **Say:**
 
-> The Activity library reads existing records from the backend. I will create a database-backed activity rather than use temporary values. It contains custom teacher-entered words, phonemes, hints, difficulty and target information. Adding the second word also demonstrates creating related Word records.
+> The Activity library reads existing records from the backend. The local suggestion API has recognised chip from a curated offline dictionary and populated editable phonemes and a child-friendly hint. It never overwrites teacher-entered values, and unknown words remain fully editable. I will save a database-backed activity rather than use temporary values. Adding the second word also demonstrates creating related Word records.
 
 ### Read
 

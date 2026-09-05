@@ -30,8 +30,9 @@ test("teacher can create, edit, and delete through the interface", async ({ page
   await expect(page).toHaveURL(/\/activities\/new$/);
   await page.getByLabel("Activity title").fill("UI walkthrough activity");
   await page.getByLabel("Written word").fill("chip");
-  await page.getByLabel("Ordered phonemes").fill("tʃ, ɪ, p");
-  await page.getByLabel("Hint", { exact: true }).fill("A small piece");
+  await page.getByLabel("Written word").press("Tab");
+  await expect(page.getByLabel("Ordered phonemes")).toHaveValue("tʃ, ɪ, p");
+  await expect(page.getByLabel("Hint", { exact: true })).toHaveValue("A small piece");
   await page.getByRole("button", { name: "Create activity" }).click();
   await expect(page).toHaveURL(/\/activities$/);
   const card = page.locator(".saved-list article").filter({ hasText: "UI walkthrough activity" });
