@@ -27,7 +27,7 @@
 - [x] Include at least five APA 7 industry sources.
 - [x] Include architecture, database, API, and Docker documentation.
 - [ ] Complete the unit’s official AI acknowledgement form.
-- [ ] Add the final GitHub repository URL.
+- [x] Add the final GitHub repository URL to the README and development-history document.
 - [ ] Confirm repository visibility matches unit instructions.
 - [ ] Confirm the submitted ZIP and presentation both expose inspectable Git history or the repository link.
 

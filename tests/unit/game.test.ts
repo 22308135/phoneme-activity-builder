@@ -21,5 +21,7 @@ describe("activity generation", () => {
     expect(html).toContain("Sounds &lt; Level 1");
     expect(html).toContain("A &lt;small&gt; piece");
     expect(html).toContain('const target=["tʃ","ɪ","p"]');
+    expect(html).toContain("button.dataset.hint");
+    expect(html).toContain(":focus-visible)::after");
   });
 });
