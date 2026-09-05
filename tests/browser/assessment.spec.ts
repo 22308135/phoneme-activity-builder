@@ -78,8 +78,28 @@ test("generating Wordle HTML also saves it to Activities", async ({ page, reques
   await request.delete(`/api/activities/${created.id}`);
 });
 
+test("Word Search uses the dictionary and saves before download", async ({ page, request }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-edge", "Download workflow only needs one browser project");
+  const activityTitle = "Automated dictionary Word Search";
+  const existing = await (await request.get("/api/activities?type=WORD_SEARCH")).json();
+  for (const activity of existing.filter((item: { title: string }) => item.title === activityTitle)) await request.delete(`/api/activities/${activity.id}`);
+  await page.goto("/word-search");
+  await page.getByLabel("Find a word").fill("train");
+  await page.getByRole("checkbox", { name: /train/ }).check();
+  await page.getByRole("button", { name: /Generate & download HTML/ }).click();
+  await page.getByLabel("Activity name").fill(activityTitle);
+  const download = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Save & download" }).click();
+  await download;
+  await expect(page.locator(".save-message")).toContainText(activityTitle);
+  const saved = await (await request.get("/api/activities?type=WORD_SEARCH")).json();
+  const created = saved.find((item: { title: string }) => item.title === activityTitle);
+  expect(created.words).toHaveLength(6);
+  await request.delete(`/api/activities/${created.id}`);
+});
+
 test("key pages have no serious automated accessibility violations", async ({ page }) => {
-  for (const route of ["/", "/about", "/settings", "/activities", "/activities/new", "/dictionary", "/wordle", "/word-search"]) {
+  for (const route of ["/", "/about", "/settings", "/activities", "/dictionary", "/wordle", "/word-search"]) {
     await page.goto(route);
     await page.addScriptTag({ content: axe.source });
     const results = await page.evaluate(async () => await (window as typeof window & { axe: { run: () => Promise<{ violations: Array<{ impact: string | null; id: string }> }> } }).axe.run());

@@ -15,6 +15,12 @@ describe("activity generation", () => {
     expect(words.every((word) => containsWord(first, word))).toBe(true);
   });
 
+  it("places a larger classroom word selection in the grid", () => {
+    const words = [["b", "aː", "θ"], ["b", "ʊ", "k"], ["k", "æ", "t"], ["tʃ", "eə"], ["tʃ", "iː", "z"], ["t", "r", "eɪ", "n"]];
+    const grid = generateWordSearch(words, 7, 1);
+    expect(words.every((word) => containsWord(grid, word))).toBe(true);
+  });
+
   it("generates escaped, standalone Wordle HTML", () => {
     const html = createGameHtml("wordle", "Sounds < Level 1", "tʃ ɪ p", "A <small> piece", ["chip"], "Foundation");
     expect(html.startsWith("<!doctype html>")).toBe(true);

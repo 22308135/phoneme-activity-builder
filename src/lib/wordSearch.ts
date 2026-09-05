@@ -1,3 +1,5 @@
+import { PHONEME_HINTS } from "@/lib/wordleKeys";
+
 export const WORD_SEARCH_SIZE = 7;
 
 export const WORD_SEARCH_GRID = [
@@ -10,12 +12,7 @@ export const WORD_SEARCH_GRID = [
   ["p", "m", "p", "ŋ", "dʒ", "t", "s"],
 ];
 
-export const WORD_SEARCH_HINTS: Record<string, string> = {
-  θ: "TH as in thin", ʃ: "SH as in ship", tʃ: "CH as in chip",
-  dʒ: "J as in jam", ŋ: "NG as in sing", ɪ: "I as in sit",
-  æ: "A as in cat", n: "N as in nose", p: "P as in pen",
-  m: "M as in map", t: "T as in top", k: "K as in kite", s: "S as in sun",
-};
+export const WORD_SEARCH_HINTS = PHONEME_HINTS;
 
 const DIRECTIONS = [
   [0, 1], [1, 0], [1, 1], [1, -1],

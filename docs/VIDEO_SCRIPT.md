@@ -117,11 +117,11 @@ Create this Wordle during the recording:
 
 ## 5:45–6:35 — stored-data Word Search and download
 
-**On screen:** Return to Activities, open the seeded Word Search, show its stored words and grid size, select endpoints, download it, and open the standalone HTML.
+**On screen:** Open Word Search, use its searchable dictionary picker to choose several targets, keep the grid size, name the activity, and select **Save & download**. Return to Activities and open the saved puzzle.
 
 **Say:**
 
-> Word Search uses a separate stored configuration. Database values determine its words and grid size. The generator places phoneme sequences horizontally, vertically and diagonally, forwards and in reverse. Cells are semantic buttons, making endpoint selection keyboard operable. This download also comes from stored data and runs independently.
+> Word Search uses the same reusable dictionary while retaining a separate stored configuration. Teachers can search a large vocabulary and select between two and ten targets without navigating away. Database values determine its words and grid size. The generator places phoneme sequences horizontally, vertically and diagonally, forwards and in reverse. Cells are semantic buttons, making endpoint selection keyboard operable. Generating HTML first saves the named activity, so it remains available in Saved Puzzles.
 
 ## 6:35–7:15 — validation and error handling
 

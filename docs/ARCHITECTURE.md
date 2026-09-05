@@ -50,9 +50,9 @@ erDiagram
 
 1. A teacher enters settings and words alongside the live preview on `/wordle` or `/word-search`, or uses an activity edit route.
 2. The client submits JSON to a collection or item API.
-3. Dedicated create and edit routes submit the editor payload; Zod checks strings, enums, phoneme arrays, target rules, and Word Search minimums.
+3. The Wordle and Word Search builders submit create payloads, while the dedicated edit route submits updates. Zod checks strings, enums, phoneme arrays, target rules, and Word Search minimums.
 4. `/api/dictionary` combines the bundled curated dictionary with teacher-added `DictionaryWord` records. The Wordle selector uses the combined list, while `/api/word-suggestions` still supports editable form suggestions without an internet dependency.
-5. Saving from Wordle writes the current word and difficulty to `Activity`; generating HTML performs the same save first, then downloads from the stored activity endpoint.
+5. Saving from either builder writes the current settings to `Activity`; generating HTML performs the same named save first, then downloads from the stored activity endpoint.
 5. Prisma persists the activity and nested words.
 6. Builders retrieve saved activities using a type filter.
 7. A saved download supplies only the activity ID.

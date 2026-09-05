@@ -23,7 +23,7 @@ Phoneme Play Builder is a database-backed Next.js application for Speech Patholo
 - Prisma schema, migration history, seed data, and cascading word deletion
 - A reusable Word Dictionary with 26 curated entries plus teacher-added database entries
 - Live Wordle and Word Search previews driven by dictionary and saved data
-- Wordle HTML generation automatically saves the puzzle to the Activities library
+- Wordle and Word Search HTML generation automatically saves the named puzzle to the Activities library
 - Server-generated, standalone HTML downloads from saved activity IDs
 - Database-aware `GET /health` endpoint
 - Docker image with automatic migration, seed data, health check, and persistent volume

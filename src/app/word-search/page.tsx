@@ -1,2 +1,2 @@
-import { ActivityEditor } from "@/components/ActivityEditor"; import { SiteShell } from "@/components/SiteShell"; import { WordSearchBuilder } from "@/components/WordSearchBuilder";
-export default async function WordSearchPage({ searchParams }: { searchParams: Promise<{ activity?: string }> }) { const activity = (await searchParams).activity ?? "example"; return <SiteShell><WordSearchBuilder key={activity} /><ActivityEditor initialType="WORD_SEARCH" embedded returnToBuilder="/word-search" /></SiteShell>; }
+import { SiteShell } from "@/components/SiteShell"; import { WordSearchBuilder } from "@/components/WordSearchBuilder";
+export default async function WordSearchPage({ searchParams }: { searchParams: Promise<{ activity?: string }> }) { const activity = (await searchParams).activity ?? "example"; return <SiteShell><WordSearchBuilder key={activity} /></SiteShell>; }
