@@ -25,16 +25,16 @@ test("health, CRUD, phonemes, and stored download work", async ({ request }, tes
 });
 
 test("teacher can create, edit, and delete through the interface", async ({ page }) => {
-  await page.goto("/activities");
-  await page.getByRole("link", { name: "New activity" }).click();
-  await expect(page).toHaveURL(/\/activities\/new$/);
+  await page.goto("/wordle");
+  await page.getByRole("link", { name: /Create with your own words/ }).click();
   await page.getByLabel("Activity title").fill("UI walkthrough activity");
   await page.getByLabel("Written word").fill("chip");
   await page.getByLabel("Written word").press("Tab");
   await expect(page.getByLabel("Ordered phonemes")).toHaveValue("tʃ, ɪ, p");
   await expect(page.getByLabel("Hint", { exact: true })).toHaveValue("A small piece");
-  await page.getByRole("button", { name: "Create activity" }).click();
-  await expect(page).toHaveURL(/\/activities$/);
+  await page.getByRole("button", { name: "Save and load preview" }).click();
+  await expect(page).toHaveURL(/\/wordle\?activity=\d+$/);
+  await page.goto("/activities");
   const card = page.locator(".saved-list article").filter({ hasText: "UI walkthrough activity" });
   await card.getByRole("link", { name: "Edit" }).click();
   await expect(page).toHaveURL(/\/activities\/\d+\/edit$/);

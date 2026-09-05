@@ -48,7 +48,7 @@ erDiagram
 
 ## Request workflow
 
-1. A teacher enters settings and words on `/activities/new` or an activity edit route.
+1. A teacher enters settings and words alongside the live preview on `/wordle` or `/word-search`, or uses an activity edit route.
 2. The client submits JSON to a collection or item API.
 3. Dedicated create and edit routes submit the editor payload; Zod checks strings, enums, phoneme arrays, target rules, and Word Search minimums.
 4. Before submission, `/api/word-suggestions` can look up a written word in the bundled curated dictionary and return editable phonemes and a child-friendly hint without an internet dependency.

@@ -75,11 +75,11 @@ Create this Wordle during the recording:
 
 ### Create
 
-**On screen:** Open `/activities`, select **New activity**, type `chip`, then leave the field to show its curated phonemes and hint populate automatically. Explain that both remain editable. Enter the rest of the demonstration data, use **Add word** for `ship`, and submit.
+**On screen:** Open `/wordle`, follow **Create with your own words and phonemes** to the form beneath the preview, type `chip`, then leave the field to show its curated phonemes and hint populate automatically. Explain that both remain editable. Enter the rest of the demonstration data, use **Add word** for `ship`, and select **Save and load preview**.
 
 **Say:**
 
-> The Activity library reads existing records from the backend. The local suggestion API has recognised chip from a curated offline dictionary and populated editable phonemes and a child-friendly hint. It never overwrites teacher-entered values, and unknown words remain fully editable. I will save a database-backed activity rather than use temporary values. Adding the second word also demonstrates creating related Word records.
+> The builder keeps custom content entry beside the playable preview, while the Saved Puzzles page remains a reusable library. The local suggestion API has recognised chip from a curated offline dictionary and populated editable phonemes and a child-friendly hint. It never overwrites teacher-entered values, and unknown words remain fully editable. I will save a database-backed activity rather than use temporary values. Adding the second word also demonstrates creating related Word records.
 
 ### Read
 
@@ -107,7 +107,7 @@ Create this Wordle during the recording:
 
 ## 4:35–5:45 — stored-data Wordle and download
 
-**On screen:** Select **Open builder** on the updated card. Show the saved selector and difficulty, enter a phoneme guess, tab to a phoneme button to expose its tooltip, download the saved activity, and open the HTML.
+**On screen:** Select **Open** on the updated card. Show the saved selector and difficulty, enter a phoneme guess, tab to a phoneme button to expose its tooltip, download the saved activity, and open the HTML.
 
 **Say:**
 
@@ -125,7 +125,7 @@ Create this Wordle during the recording:
 
 ## 6:35–7:15 — validation and error handling
 
-**On screen:** Open New activity, submit an empty or incomplete form, and show the message. Then show `src/lib/activity.ts` and an API route.
+**On screen:** Use the custom form on a builder page, submit an empty or incomplete form, and show the message. Then show `src/lib/activity.ts` and an API route.
 
 **Say:**
 
