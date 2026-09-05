@@ -22,6 +22,8 @@ describe("activity generation", () => {
     expect(html).toContain("A &lt;small&gt; piece");
     expect(html).toContain('const target=["tʃ","ɪ","p"]');
     expect(html).toContain("button.dataset.hint");
+    expect(html).not.toContain("undefined");
+    expect(html).toContain('"tʃ":"CH as in chip"');
     expect(html).toContain(":focus-visible)::after");
   });
 });

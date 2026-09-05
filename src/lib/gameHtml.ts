@@ -1,4 +1,5 @@
 import { WORD_SEARCH_GRID, WORD_SEARCH_HINTS, WORD_SEARCH_SIZE } from "@/lib/wordSearch";
+import { buildWordleKeys, phonemeHint } from "@/lib/wordleKeys";
 
 export type Activity = "wordle" | "word-search";
 export type Difficulty = "Foundation" | "Developing" | "Extending";
@@ -10,18 +11,21 @@ export function createGameHtml(activity: Activity, title: string, answer: string
   const wordleSettings = difficultySettings[difficulty];
   const hintMarkup = difficulty === "Foundation" ? `<p class="hint">Hint: ${esc(hint)}</p>` : difficulty === "Developing" ? `<button id="hint-button" class="hint-button">Show hint</button><p id="hint" class="hint" hidden>Hint: ${esc(hint)}</p>` : "";
   const target = JSON.stringify(answer.split(" "));
+  const targetSounds = answer.split(" ");
+  const wordleKeys = buildWordleKeys(targetSounds, wordleSettings.keys, `${words[0] ?? "word"}-${difficulty}`);
+  const wordleHints = Object.fromEntries(wordleKeys.map((sound) => [sound, phonemeHint(sound)]));
   const game = activity === "wordle"
     ? `${hintMarkup}<p class="level">${difficulty} · ${wordleSettings.attempts} attempts</p><div id="board" class="board" aria-label="Phoneme Wordle board"></div><p id="message" aria-live="polite">Choose the phonemes in order.</p><div id="keyboard" class="keyboard" aria-label="Phoneme keyboard"></div>`
     : `<p class="hint">Search across, down, diagonally and backwards. Click the first and last sound in each word.</p><div id="search-grid" class="grid" aria-label="7 by 7 phoneme word search"></div><p id="message" aria-live="polite">Find all ${words.length} phoneme words.</p><ul id="targets" class="targets"></ul>`;
   const script = activity === "wordle" ? `<script>
-const target=${target};const maxAttempts=${wordleSettings.attempts};const answerWord=${JSON.stringify(words[0] ?? "")};const sounds=[...new Set([...target,"θ","ʃ","tʃ","dʒ","ŋ","ɪ","æ","n","p","m","t","k"])].slice(0,${wordleSettings.keys});const soundHints={"θ":"TH as in thin","ʃ":"SH as in ship","tʃ":"CH as in chip","dʒ":"J as in jam","ŋ":"NG as in sing","ɪ":"I as in sit","æ":"A as in cat","n":"N as in nose","p":"P as in pen","m":"M as in map","t":"T as in top","k":"K as in kite"};let row=0;let current=[];let finished=false;
+const target=${target};const maxAttempts=${wordleSettings.attempts};const answerWord=${JSON.stringify(words[0] ?? "")};const sounds=${JSON.stringify(wordleKeys)};const soundHints=${JSON.stringify(wordleHints)};let row=0;let current=[];let finished=false;
 const board=document.getElementById("board");const keyboard=document.getElementById("keyboard");const message=document.getElementById("message");board.style.gridTemplateColumns="repeat("+target.length+",64px)";
 for(let i=0;i<maxAttempts*target.length;i++){const cell=document.createElement("div");cell.className="cell";board.appendChild(cell)}
 function draw(){for(let column=0;column<target.length;column++){board.children[row*target.length+column].textContent=current[column]?"/"+current[column]+"/":""}}
 function add(sound){if(!finished&&row<maxAttempts&&current.length<target.length){current.push(sound);draw()}}
 function removeSound(){if(!finished&&row<maxAttempts){current.pop();draw()}}
 function enter(){if(finished)return;if(current.length!==target.length){message.textContent="Choose "+target.length+" phonemes first.";return}let won=true;for(let column=0;column<target.length;column++){const sound=current[column];const cell=board.children[row*target.length+column];const state=sound===target[column]?"correct":target.includes(sound)?"present":"absent";cell.classList.add(state);if(state!=="correct")won=false}row++;current=[];finished=won||row===maxAttempts;message.textContent=won?"Completed — the English word is "+answerWord+".":row===maxAttempts?"Finished — the word was "+answerWord+".":"Attempt "+row+" of "+maxAttempts+". Try again.";message.className=won?"completion complete":row===maxAttempts?"completion unsuccessful":""}
-sounds.forEach(sound=>{const button=document.createElement("button");button.textContent="/"+sound+"/";button.dataset.hint=soundHints[sound];button.setAttribute("aria-label","/"+sound+"/, "+soundHints[sound]);button.onclick=()=>add(sound);keyboard.appendChild(button)});[["Enter",enter],["⌫",removeSound]].forEach(item=>{const button=document.createElement("button");button.textContent=item[0];button.className="action";button.onclick=item[1];keyboard.appendChild(button)});
+sounds.forEach(sound=>{const button=document.createElement("button");const explanation=soundHints[sound]||"Phoneme /"+sound+"/";button.textContent="/"+sound+"/";button.dataset.hint=explanation;button.setAttribute("aria-label","/"+sound+"/, "+explanation);button.onclick=()=>add(sound);keyboard.appendChild(button)});[["Enter",enter],["⌫",removeSound]].forEach(item=>{const button=document.createElement("button");button.textContent=item[0];button.className="action";button.onclick=item[1];keyboard.appendChild(button)});
 const hintButton=document.getElementById("hint-button");if(hintButton)hintButton.onclick=()=>{document.getElementById("hint").hidden=false;hintButton.remove()};
 </script>` : `<script>
 const size=${searchSize};const cells=${JSON.stringify(searchGrid.flat())};const targets=${searchTargets};const soundHints=${JSON.stringify(WORD_SEARCH_HINTS)};let start=null;const found=new Set();const foundCells=new Set();
