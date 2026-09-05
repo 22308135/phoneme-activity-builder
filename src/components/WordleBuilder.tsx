@@ -25,20 +25,22 @@ export function WordleBuilder() {
   const [showHint, setShowHint] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
+  const [activityTitle, setActivityTitle] = useState("");
+  const [pendingAction, setPendingAction] = useState<"save" | "download" | null>(null);
   const choice = options[index], config = settings[difficulty];
   const keys = buildWordleKeys(choice.phonemes, config.keyCount, `${choice.word}-${difficulty}`);
   const won = guesses.some((guess) => guess.result.every((state) => state === "correct"));
   const gameOver = won || guesses.length >= config.attempts;
 
   const resetGame = () => { setCurrent([]); setGuesses([]); setMessage("Choose the phoneme tiles in order."); setShowHint(difficulty === "Foundation"); };
-  const changeTarget = (nextIndex: number) => { setIndex(nextIndex); setActivityId(""); setSaveMessage(""); setCurrent([]); setGuesses([]); setMessage("Choose the phoneme tiles in order."); };
-  const changeDifficulty = (next: Difficulty, keepSaved = false) => { setDifficulty(next); if (!keepSaved) setActivityId(""); setSaveMessage(""); setCurrent([]); setGuesses([]); setMessage("Choose the phoneme tiles in order."); setShowHint(next === "Foundation"); };
+  const changeTarget = (nextIndex: number) => { setIndex(nextIndex); setActivityId(""); setActivityTitle(""); setPendingAction(null); setSaveMessage(""); setCurrent([]); setGuesses([]); setMessage("Choose the phoneme tiles in order."); };
+  const changeDifficulty = (next: Difficulty, keepSaved = false) => { setDifficulty(next); if (!keepSaved) { setActivityId(""); setActivityTitle(""); } setPendingAction(null); setSaveMessage(""); setCurrent([]); setGuesses([]); setMessage("Choose the phoneme tiles in order."); setShowHint(next === "Foundation"); };
   const applyActivity = (activity: SavedActivity) => {
     const nextOptions = activity.words.map((word) => ({ phonemes: word.phonemes, word: word.text, hint: word.hint ?? "No hint provided" }));
     if (!nextOptions.length) return;
     const targetIndex = Math.max(0, activity.words.findIndex((word) => word.isTarget));
     setOptions(nextOptions); setIndex(targetIndex);
-    changeDifficulty((activity.difficulty.charAt(0) + activity.difficulty.slice(1).toLowerCase()) as Difficulty, true); setActivityId(activity.id);
+    changeDifficulty((activity.difficulty.charAt(0) + activity.difficulty.slice(1).toLowerCase()) as Difficulty, true); setActivityId(activity.id); setActivityTitle(activity.title);
   };
   useEffect(() => {
     const requested = Number(new URLSearchParams(window.location.search).get("activity"));
@@ -48,13 +50,19 @@ export function WordleBuilder() {
     }).catch(() => undefined);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const saveActivity = async (download: boolean) => {
+  const beginSave = (action: "save" | "download") => {
+    setPendingAction(action); setSaveMessage("");
+    if (!activityTitle) setActivityTitle(`${choice.word[0].toUpperCase()}${choice.word.slice(1)} phoneme Wordle`);
+  };
+  const saveActivity = async () => {
+    if (!pendingAction || !activityTitle.trim()) return;
+    const download = pendingAction === "download";
     setSaving(true); setSaveMessage("Saving to Activities…");
-    const payload = { title: `${choice.word[0].toUpperCase()}${choice.word.slice(1)} phoneme Wordle`, type: "WORDLE", difficulty: difficulty.toUpperCase(), gridSize: null, hintEnabled: difficulty !== "Extending", words: [{ text: choice.word, phonemes: choice.phonemes, hint: choice.hint, isTarget: true }] };
+    const payload = { title: activityTitle.trim(), type: "WORDLE", difficulty: difficulty.toUpperCase(), gridSize: null, hintEnabled: difficulty !== "Extending", words: [{ text: choice.word, phonemes: choice.phonemes, hint: choice.hint, isTarget: true }] };
     const response = await fetch(activityId ? `/api/activities/${activityId}` : "/api/activities", { method: activityId ? "PUT" : "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
     const result = await response.json(); setSaving(false);
     if (!response.ok) { setSaveMessage(result?.issues?.[0]?.message ?? result.error ?? "Could not save activity."); return; }
-    setActivityId(result.id); setSaveMessage(download ? "Saved to Activities and download started." : "Saved to Activities.");
+    setActivityId(result.id); setPendingAction(null); setSaveMessage(download ? `Saved “${result.title}” to Activities and started download.` : `Saved “${result.title}” to Activities.`);
     if (download) { const link = document.createElement("a"); link.href = `/api/activities/${result.id}/download`; link.click(); }
   };
   const addSound = (sound: string) => { if (!gameOver && current.length < choice.phonemes.length) setCurrent([...current, sound]); };
@@ -72,7 +80,8 @@ export function WordleBuilder() {
       <label>Target phoneme word<select value={index} onChange={(event) => changeTarget(Number(event.target.value))}>{options.map((option, optionIndex) => <option value={optionIndex} key={option.word}>/{option.phonemes.join("/ /")}/ · {option.word}</option>)}</select></label>
       <label>Difficulty<select value={difficulty} onChange={(event) => changeDifficulty(event.target.value as Difficulty)}><option>Foundation</option><option>Developing</option><option>Extending</option></select></label>
       <div className="tip"><strong>{difficulty}</strong><br />{config.attempts} attempts · {config.keyCount} sound keys · hint {config.hint}.</div>
-      <div className="builder-actions"><button type="button" className="button secondary" disabled={saving} onClick={() => saveActivity(false)}>Save Wordle to Activities</button><button type="button" className="button primary" disabled={saving} onClick={() => saveActivity(true)}>Generate &amp; download HTML <span aria-hidden="true">↓</span></button></div>
+      <div className="builder-actions"><button type="button" className="button secondary" disabled={saving} onClick={() => beginSave("save")}>Save Wordle to Activities</button><button type="button" className="button primary" disabled={saving} onClick={() => beginSave("download")}>Generate &amp; download HTML <span aria-hidden="true">↓</span></button></div>
+      {pendingAction && <div className="save-panel"><label htmlFor="wordle-activity-title">Activity name</label><input id="wordle-activity-title" autoFocus required maxLength={120} value={activityTitle} onChange={(event) => setActivityTitle(event.target.value)} /><div className="save-panel-actions"><button type="button" className="button primary" disabled={saving || activityTitle.trim().length < 2} onClick={saveActivity}>{pendingAction === "download" ? "Save & download" : "Confirm save"}</button><button type="button" className="button secondary" disabled={saving} onClick={() => setPendingAction(null)}>Cancel</button></div></div>}
       <p className="save-message" role="status">{saveMessage}</p>
     </aside>
     <section className="preview-card" aria-label="Live Wordle preview"><div className="preview-bar"><span>Live playable preview</span><span className="status-dot">● {won ? "Complete" : gameOver ? "Finished" : `${guesses.length} of ${config.attempts} attempts`}</span></div><div className="game-preview wordle-game">

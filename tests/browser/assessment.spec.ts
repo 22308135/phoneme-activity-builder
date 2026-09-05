@@ -27,7 +27,7 @@ test("health, CRUD, phonemes, and stored download work", async ({ request }, tes
 test("teacher can create, edit, and delete through the interface", async ({ page, request }) => {
   const updatedTitle = `UI walkthrough updated ${Date.now()}`;
   const existing = await (await request.get("/api/activities?type=WORDLE")).json();
-  for (const activity of existing.filter((item: { title: string }) => item.title === "Zap phoneme Wordle")) await request.delete(`/api/activities/${activity.id}`);
+  for (const activity of existing.filter((item: { title: string }) => ["Zap phoneme Wordle", "UI walkthrough activity"].includes(item.title))) await request.delete(`/api/activities/${activity.id}`);
   await page.goto("/dictionary");
   await page.getByLabel("Written word").fill("zap");
   await page.getByLabel("Ordered phonemes").fill("z, æ, p");
@@ -37,9 +37,12 @@ test("teacher can create, edit, and delete through the interface", async ({ page
   await page.goto("/wordle");
   await page.getByLabel("Target phoneme word").selectOption({ label: "/z/ /æ/ /p/ · zap" });
   await page.getByRole("button", { name: "Save Wordle to Activities" }).click();
-  await expect(page.locator(".save-message")).toContainText("Saved to Activities");
+  await expect(page.getByLabel("Activity name")).toHaveValue("Zap phoneme Wordle");
+  await page.getByLabel("Activity name").fill("UI walkthrough activity");
+  await page.getByRole("button", { name: "Confirm save" }).click();
+  await expect(page.locator(".save-message")).toContainText("UI walkthrough activity");
   await page.goto("/activities");
-  const card = page.locator(".saved-list article").filter({ hasText: "Zap phoneme Wordle" }).first();
+  const card = page.locator(".saved-list article").filter({ hasText: "UI walkthrough activity" }).first();
   await card.getByRole("link", { name: "Edit" }).click();
   await expect(page).toHaveURL(/\/activities\/\d+\/edit$/);
   await page.getByLabel("Activity title").fill(updatedTitle);
@@ -58,16 +61,19 @@ test("teacher can create, edit, and delete through the interface", async ({ page
 
 test("generating Wordle HTML also saves it to Activities", async ({ page, request }, testInfo) => {
   test.skip(testInfo.project.name !== "desktop-edge", "Download workflow only needs one browser project");
+  const activityTitle = "Automated downloaded Wordle";
   const existing = await (await request.get("/api/activities?type=WORDLE")).json();
-  for (const activity of existing.filter((item: { title: string }) => item.title === "Chip phoneme Wordle")) await request.delete(`/api/activities/${activity.id}`);
+  for (const activity of existing.filter((item: { title: string }) => item.title === activityTitle)) await request.delete(`/api/activities/${activity.id}`);
   await page.goto("/wordle");
   await page.getByLabel("Target phoneme word").selectOption({ label: "/tʃ/ /ɪ/ /p/ · chip" });
-  const download = page.waitForEvent("download");
   await page.getByRole("button", { name: /Generate & download HTML/ }).click();
+  await page.getByLabel("Activity name").fill(activityTitle);
+  const download = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Save & download" }).click();
   await download;
-  await expect(page.locator(".save-message")).toContainText("Saved to Activities");
+  await expect(page.locator(".save-message")).toContainText(activityTitle);
   const saved = await (await request.get("/api/activities?type=WORDLE")).json();
-  const created = saved.find((item: { title: string }) => item.title === "Chip phoneme Wordle");
+  const created = saved.find((item: { title: string }) => item.title === activityTitle);
   expect(created).toBeTruthy();
   await request.delete(`/api/activities/${created.id}`);
 });
