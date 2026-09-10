@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createGameHtml } from "@/lib/gameHtml";
 import { generateWordSearch } from "@/lib/wordSearch";
+import { dictionaryEntries } from "@/lib/phonemeDictionary";
 
 function containsWord(grid: string[][], word: string[]) {
   const directions = [-1, 0, 1].flatMap((row) => [-1, 0, 1].map((column) => [row, column])).filter(([row, column]) => row || column);
@@ -8,6 +9,18 @@ function containsWord(grid: string[][], word: string[]) {
 }
 
 describe("activity generation", () => {
+  it("never drops selected words across classroom sizes and seeds", () => {
+    const entries = dictionaryEntries();
+    for (const size of [7, 8, 9]) for (let seed = 0; seed < 40; seed++) {
+      const words = Array.from({ length: 10 }, (_, offset) => entries[(seed + offset) % entries.length].phonemes);
+      expect(words.every((word) => containsWord(generateWordSearch(words, size, seed), word))).toBe(true);
+    }
+  });
+
+  it("rejects oversized and impossible selections instead of returning an incomplete grid", () => {
+    expect(() => generateWordSearch([["a", "b", "c"]], 2, 1)).toThrow(/too long/);
+    expect(() => generateWordSearch([["a", "a"], ["b", "b"], ["c", "c"]], 2, 1)).toThrow(/Could not fit every/);
+  });
   it("places each phoneme word in a deterministic search grid", () => {
     const words = [["θ", "ɪ", "n"], ["tʃ", "ɪ", "p"]];
     const first = generateWordSearch(words, 7, 42);

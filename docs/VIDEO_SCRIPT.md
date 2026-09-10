@@ -1,229 +1,191 @@
-# Assessment 2 video walkthrough script
+# Assessment 2 video script — Louis
 
-Target length: **8–10 minutes**. Keep your face visible and narrate continuously. Record the browser, terminal, editor and Docker Desktop at readable zoom. Do not speed up the final recording.
+Aim for roughly 9–10 minutes including clicking and typing. That is a rehearsal estimate, not a limit specified in the supplied brief; follow any separate lecturer instructions. Read only the blockquotes aloud. Everything else is a cue for what to show.
+
+Use this as speaking notes and change phrases you would not normally say. Pause while pages load. Make sure you understand the code you show. Complete the unit's AI acknowledgement accurately for assistance with the project and script.
 
 ## Before recording
 
-1. Start Docker Desktop and wait until the engine is ready.
-2. Push the latest `main` branch to `https://github.com/22308135/phoneme-activity-builder`.
-3. Open the project in VS Code and prepare browser tabs for the app, `/health`, and GitHub.
-4. Use a clean Docker container on port 3001 so it does not conflict with the local app.
-5. Confirm your camera, microphone and screen capture are recorded.
-6. Keep your student ID ready to show in the first 30 seconds.
-
-Run these before recording:
+- Keep your face visible and microphone on throughout. Have your student ID ready for the first 30 seconds.
+- Open `http://localhost:3001`, `/health`, VS Code, Docker Desktop, and your GitHub commits page.
+- Prepare `prisma/schema.prisma`, `src/lib/activity.ts`, `src/app/api/activities/[id]/route.ts`, `src/app/api/activities/[id]/download/route.ts`, `src/lib/gameHtml.ts`, and `Dockerfile` in VS Code.
+- Run the commands below beforehand. Keep the actual successful output ready to show.
+- Confirm your latest commits are on GitHub before claiming they are. The previous readiness check showed seven local commits awaiting a push.
+- Use the existing Docker container on port 3001; do not start a second container on that port.
+- Rehearse once and download fresh HTML files. Old downloads do not update when the app changes.
 
 ```powershell
 npm run check
 npm run test:browser
 git status --short
-git log --oneline --decorate --graph --all
-docker build -t phoneme-activity-builder:assessment2 .
+git log -12 --oneline
+docker ps
+curl.exe -i http://localhost:3001/health
 ```
 
-The Git worktree should be clean. Pre-building Docker keeps installation output out of the presentation.
+### Demonstration values
 
-## Demonstration data
-
-Create this Wordle during the recording:
-
-| Field | Value |
+| Use | Value |
 | --- | --- |
-| Title | Video phoneme Wordle |
-| Type | Wordle |
-| Difficulty | Developing |
-| Hints | Enabled |
-| Word 1 | chip |
-| Ordered phonemes | `tʃ, ɪ, p` |
-| Hint | A small piece |
-| Target | Yes |
-| Word 2 | ship |
-| Ordered phonemes | `ʃ, ɪ, p` |
-| Hint | A large boat |
+| New dictionary word | `chat` |
+| Ordered phonemes | `tʃ, æ, t` |
+| Initial hint | `A short talk` |
+| Updated dictionary hint | `A friendly talk` |
+| Wordle difficulty | Developing |
+| Wordle name | `Week 2 - CH practice` |
+| Updated activity name | `Week 2 - CH revision` |
+| Updated activity hint | `A friendly conversation` |
+| Extra activity word | `chip` / `tʃ, ɪ, p` / `A small piece` |
+| Word Search name | `Week 2 - Sound search` |
 
-`tʃ` is deliberately used because it must remain one ordered sound token even though it contains multiple Unicode characters.
+If a custom `chat` entry exists from rehearsal, remove that rehearsal entry before recording. Leave unrelated resources alone.
 
-## 0:00–0:30 — identity and purpose
+## 0:00–0:30 — introduction
 
-**On screen:** Show your face and student ID clearly, then the home page.
+Show your face and student ID, then Home.
 
-**Say:**
-
-> My name is Louis Callander, and my student number is 22308135. This is my Assessment 2 submission, Phoneme Play Builder. The project began with the required `npx create-next-app` starter workflow. It extends my Assessment 1 Next.js frontend with a database, backend route handlers, validation, CRUD operations, stored-data activity generation, automated checks and Docker support.
-
-## 0:30–1:15 — frontend continuity and Assessment 1 feedback
-
-**On screen:** Briefly show Home, About, Settings, Word Dictionary, Wordle, Word Search and Activities. Show the embedded About video and the System, Light, Dark, Compact and Comfortable settings.
-
-**Say:**
-
-> The original frontend remains available as App Router pages. I also addressed the Assessment 1 feedback. The About page now contains its video. A shared preference context provides System, Light and Dark themes and layout density, persisted in one-year cookies. Teachers can enter their own content instead of relying on fixed examples, and phoneme help appears on pointer hover and keyboard focus in both live and downloaded activities.
-
-## 1:15–2:15 — architecture and database schema
-
-**On screen:** Open `docs/ARCHITECTURE.md`, `prisma/schema.prisma`, `src/lib/activity.ts`, and the API route folders.
-
-**Say:**
-
-> The request flow is React interface, Next.js route handler, Zod validation, Prisma ORM and SQLite. Activity stores the title, type, difficulty, optional grid size, hint preference and timestamps. Each Activity has many ordered Word records. A Word stores its written form, hint, list position, target state and parent activity ID. Cascade deletion prevents orphaned words.
+> Hi, I'm Louis Callander, and my student number is 22308135. This is my second assessment for Phoneme Play Builder.
 >
-> Phonemes are stored as a JSON-encoded ordered string array. For example, chip is stored as `tʃ`, `ɪ`, `p`. This preserves `tʃ` as one phoneme instead of splitting it into characters. Multiple Activity records support multiple Wordle and Word Search configurations.
+> The first assessment was mainly the frontend. This part adds the database and backend, so a teacher can save their words and activities, come back to edit them, and download them again later. I'll show that working and then go through how the backend handles it.
+
+## 0:30–1:10 — changes since Assessment 1
+
+Show About and play a few seconds of its video. Show Settings: System, Light, Dark, and layout density. Briefly resize the browser and restore it.
+
+> A few of the changes came directly from my first assessment feedback. The short walkthrough is now actually on the About page. Settings has a System theme option as well as Light and Dark, and there's a shared provider for those preferences. The theme and layout choice are saved in cookies.
 >
-> Zod validates lengths, enums, phoneme arrays, grid settings and activity-specific rules before Prisma writes anything. Wordle requires exactly one target, while Word Search requires at least two words.
+> The other big change is custom content. There's now a Word Dictionary, the two builders, and Activities for the saved puzzles. That gives each page a clear job.
 
-## 2:15–4:35 — complete CRUD demonstration
+## 1:10–2:20 — dictionary: create, read and update
 
-### Create
+Open Word Dictionary. Add `chat`, `tʃ, æ, t`, and `A short talk`. Click **Add to dictionary**. Find its Custom card and refresh.
 
-**On screen:** Open **Word Dictionary**, show the curated entries, then add a custom word with ordered phonemes and a hint. Open `/wordle`, select that word, choose a difficulty, and select **Save Wordle to Activities**.
-
-**Say:**
-
-> The Word Dictionary combines a curated offline vocabulary with teacher-added database entries. Every entry supplies an ordered phoneme sequence and a child-friendly hint to the Wordle builder. Saving creates a database-backed activity, while the Saved Puzzles page remains a reusable download and management library.
-
-### Read
-
-**On screen:** Point to the new card, select **Edit**, and show that both words and settings reload.
-
-**Say:**
-
-> The activity appears after a backend read. Edit retrieves the stored record and ordered words through `GET /api/activities/:id`. These fields are populated from SQLite rather than hard-coded defaults.
-
-### Update words and settings
-
-**On screen:** Rename it `Updated video phoneme Wordle`, choose Extending, change the `ship` hint to `Travels across water`, add `thin` with `θ, ɪ, n` and `Not thick`, remove `ship`, and save.
-
-**Say:**
-
-> I am updating both activity settings and related words. I changed a hint, added a word, removed a word, changed difficulty and renamed the activity. The PUT route validates the payload and performs related-word replacement inside a Prisma transaction, preventing a partial update from leaving inconsistent data.
-
-### Read updated data
-
-**On screen:** Open Edit again, show the saved changes, then return to the library.
-
-**Say:**
-
-> Reading the record again confirms the updated title, difficulty, phonemes and word list were persisted.
-
-## 4:35–5:45 — stored-data Wordle and download
-
-**On screen:** Select **Open** on the updated card. Show the saved selector and difficulty, enter a phoneme guess, tab to a phoneme button to expose its tooltip, download the saved activity, and open the HTML.
-
-**Say:**
-
-> Open Builder passes the saved activity ID to Wordle. The frontend fetches its stored target, phonemes, hint and difficulty. Feedback uses text as well as colour, and keyboard users receive the same phoneme explanation through a focus-visible tooltip.
+> I'll add chat as a new word. This field holds the written word, this one holds the sounds in order, and this is the hint.
 >
-> The download route retrieves the record by ID and generates self-contained HTML with embedded CSS, JavaScript and activity data. Generation is separated into `src/lib/gameHtml.ts`; the download component only handles the browser action. The file runs independently without the Next.js server.
+> The dictionary comes with a starter set, but teachers can add extra entries. This one goes into the database. I'll refresh the page so you can see it's still there.
 
-## 5:45–6:35 — stored-data Word Search and download
+Enter `chat` again with the same phonemes and the updated hint `A friendly talk`. Click **Add to dictionary** and show the changed card.
 
-**On screen:** Open Word Search, use its searchable dictionary picker to choose several targets, keep the grid size, name the activity, and select **Save & download**. Return to Activities and open the saved puzzle.
+> Entering the same word updates its custom entry. I've changed the hint here, and you can see the card has picked that up. So that's creating, reading and updating a dictionary word.
 
-**Say:**
+## 2:20–3:25 — build and save Wordle
 
-> Word Search uses the same reusable dictionary while retaining a separate stored configuration. Teachers can search a large vocabulary and select between two and ten targets without navigating away. Database values determine its words and grid size. The generator places phoneme sequences horizontally, vertically and diagonally, forwards and in reverse. Cells are semantic buttons, making endpoint selection keyboard operable. Generating HTML first saves the named activity, so it remains available in Saved Puzzles.
+Open Wordle. Choose **chat**, then **Developing**. Focus a sound button to show its tooltip. Enter a wrong guess, then `tʃ`, `æ`, `t` and Enter. Click **Save Wordle to Activities**, enter `Week 2 - CH practice`, and click **Confirm save**.
 
-## 6:35–7:15 — validation and error handling
+> Chat is now available in the builder with its phonemes and hint. Difficulty changes the number of attempts, the number of sound keys and how the hint is shown.
+>
+> The answer sounds are mixed with the other keys. I'll put in a wrong guess first, then the correct sounds. At the end it shows the English word.
+>
+> When I save, this little panel lets me name the activity. I'm calling it Week 2 - CH practice so it's easy to recognise in the library.
 
-**On screen:** Use the Word Dictionary form, submit an empty or incomplete entry, and show browser validation. Then show `src/lib/activity.ts` and an API route.
+Open Activities and show the card.
 
-**Say:**
+> Here's the saved puzzle. I can open it, download it, edit it or delete it from here.
 
-> Invalid data is rejected before storage and the interface presents clear feedback. At API level, invalid input and malformed JSON return 400, missing records return 404, malformed stored phonemes return 422, and unexpected failures return a controlled 500 without exposing internal details.
+## 3:25–4:40 — activity and related-word CRUD
 
-## 7:15–7:40 — health endpoint
+Click **Edit** on that card. Show the loaded word and settings. Rename it `Week 2 - CH revision`; change chat's hint to `A friendly conversation`. Add `chip` with `tʃ, ɪ, p` and `A small piece`, keeping chat as the target. Click **Save changes**. Reopen Edit and point out both saved words.
 
-**On screen:** Open `/health`, then run:
+> This is loading the saved record from the backend. I'll change the title and hint, and add chip to the activity's word list. Chat stays as the target for this Wordle.
+>
+> After saving, I'll open it again. Both words and the updated hint are still here, so those changes have been stored.
+
+Remove only chip, save, and reopen Edit to show chat remains. Return to Activities.
+
+> I'll remove chip and save again. Now the activity has just chat. That shows adding, reading, changing and removing word content within a saved activity as well.
+
+## 4:40–5:20 — download Wordle from stored data
+
+Click **Download HTML** on the saved card. Open the new file and solve it using `tʃ`, `æ`, `t`. Show a tooltip in the file.
+
+> This download comes from the saved activity. The server reads its words and settings from the database and puts them into a standalone HTML file.
+>
+> I've opened that file here. It has the game code and styling inside it, so it can run without the Next.js server. The teacher can share it with a class and download another copy from Activities later.
+
+## 5:20–6:20 — Word Search
+
+Open Word Search. Keep the initial five selected words. Search for `chat`, check it, and clear the search. Choose **9 × 9**. Click **Generate & download HTML**, enter `Week 2 - Sound search`, then **Save & download**. Open the file and find a word by selecting its first and last sound. Return to Activities and show both named cards.
+
+> Word Search uses the same dictionary. The search box makes it easier to find a word without scrolling through the whole list. I'll add chat to this selection and use a nine-by-nine grid.
+>
+> Generate and download asks for a name, saves the settings, and then downloads the activity. In the downloaded game, I select the first and last sound of a word. Words can run across, down, diagonally or backwards.
+>
+> Back in Activities, both puzzles are saved separately. They have their own words and settings, and I can download either one again.
+
+## 6:20–7:25 — explain the backend and schema
+
+Show the Prisma schema, `src/lib/activity.ts`, and the activity PUT route. Point to the relevant fields and transaction as you explain them.
+
+> This is a Next.js project using the create-next-app starter. The React pages call the API routes, the routes validate the data, and Prisma handles reading and writing to SQLite.
+>
+> Activity stores things like the title, type, difficulty and grid size. Each activity has related Word records, with the written word, hint, position and target flag. DictionaryWord is separate because those entries are reusable vocabulary. A saved activity keeps its own copy of the words.
+>
+> The phonemes are stored as a JSON array. For chat, that's these three entries: tʃ, æ and t. That matters because tʃ is one sound token even though it uses more than one character.
+>
+> This update runs inside a transaction. It replaces the activity's word rows and updates the settings together, so they either succeed together or roll back together.
+
+## 7:25–8:05 — validation and errors
+
+In Word Dictionary, try submitting an empty form. Then show `activityInputSchema`. Run this read-only request to show a backend error and HTTP 400:
 
 ```powershell
-curl.exe -i http://localhost:3000/health
+curl.exe -i http://localhost:3001/api/activities/not-a-number
 ```
 
-**Say:**
+> The form catches missing fields, but there's server-side validation as well. Zod checks the activity data before it gets written to the database. For example, Wordle needs exactly one target, and Word Search needs at least two words.
+>
+> Here's an invalid activity ID returning a clear error. The activity routes also handle missing records, and the download route rejects missing or empty phoneme lists. Those checks help stop invalid content reaching a generated game.
 
-> The health route returns HTTP 200 with status OK and database connected. It performs a real `SELECT 1` through Prisma and returns 503 if the database is unavailable.
+## 8:05–8:45 — Docker and health
 
-## 7:40–8:40 — Docker demonstration
-
-**On screen:** Show the Dockerfile, then run:
-
-```powershell
-docker run --rm --name phoneme-builder-demo -p 3001:3000 -v phoneme-activity-demo:/data phoneme-activity-builder:assessment2
-```
-
-In another terminal:
+Show the running app container in Docker Desktop and its published port. Show `Dockerfile`, then run:
 
 ```powershell
 docker ps
 curl.exe -i http://localhost:3001/health
 ```
 
-Open `http://localhost:3001/activities` and show that it works.
-
-**Say:**
-
-> The multi-stage image installs locked dependencies, generates Prisma Client and builds the production app. Startup deploys committed migrations, runs the idempotent seed and starts Next.js. SQLite lives in `/data`, so records persist independently of the container. Docker also checks the database-aware health endpoint.
-
-## 8:40–9:20 — tests, accessibility and Git history
-
-**On screen:** Show successful output from:
-
-```powershell
-npm run check
-npm run test:browser
-git status --short
-git log --oneline --decorate --graph --all
-```
-
-Open GitHub and show the commits. Point out `26505f6`, `2e35048`, `47a284d`, `65fc27c`, and the latest commit.
-
-**Say:**
-
-> The project passes lint, unit tests, TypeScript and a production build. Playwright verifies health, CRUD, stored downloads and preference persistence in desktop and mobile projects. Axe checks key routes for serious and critical accessibility violations. Git history shows incremental frontend, backend, accessibility, testing and documentation work rather than one final upload. The worktree is clean, and these commits are visible on GitHub.
-
-## 9:20–9:45 — submission documentation
-
-**On screen:** Briefly show `README.md`, `docs/REFERENCES.md`, `docs/ARCHITECTURE.md`, and the clean submission ZIP.
-
-**Say:**
-
-> The submitted ZIP contains the application source, Prisma schema and migration, tests, Dockerfile and supporting documentation. It excludes dependencies, builds, environment secrets and local database files. The README contains the GitHub URL and setup instructions. The written documentation includes architecture decisions, limitations and more than five APA 7 industry references. I will also submit the unit's required AI acknowledgement separately.
-
-## 9:45–10:15 — delete and conclusion
-
-**On screen:** Delete `Updated video phoneme Wordle` and show that it disappears.
-
-**Say:**
-
-> Finally, deleting the demonstration activity calls the DELETE route, and the cascade removes its related words. This completes create, read, update and delete for the activity and word data.
+> The app I've been using is running in Docker on port 3001. The Dockerfile installs the dependencies, builds Next.js, and starts the production app. On startup it also applies the database migrations and seeds the example activities if needed.
 >
-> Phoneme Play Builder is now a data-driven application for Speech Pathology teachers. It stores multiple custom configurations, validates specialist phoneme content, generates portable Wordle and Word Search activities, and runs reproducibly in Docker. Thank you.
+> The database is in the mounted data volume, so it can survive replacing the container. This health endpoint checks the database connection as well as the app. You can see HTTP 200 and database connected here.
 
-## Recording checklist
+## 8:45–9:25 — tests, history and submission
 
-- [ ] Student ID shown within the first 30 seconds.
-- [ ] Face visible and narration present throughout.
-- [ ] Assessment 1 frontend and feedback improvements identified.
-- [ ] Activity and Word schema explained.
-- [ ] Multi-character `tʃ` storage explained.
-- [ ] Custom dictionary word created and selected in Wordle.
-- [ ] Activity and individual word values read back.
-- [ ] Word added, edited and removed during update.
-- [ ] Updated values retrieved again.
-- [ ] Wordle loaded and downloaded from stored data.
-- [ ] Word Search loaded and downloaded from stored data.
-- [ ] Both standalone HTML files opened.
-- [ ] Validation failure shown.
-- [ ] `/health` visibly returns HTTP 200.
-- [ ] Docker container visibly running and healthy.
-- [ ] Tests shown passing.
-- [ ] Git log and GitHub commit history visibly demonstrated.
-- [ ] Demonstration activity deleted.
+Show the successful check output prepared earlier. Show `git log -12 --oneline`, then GitHub's commits page. Point to `b40d23d` (dictionary), `0cd1e2b` (downloaded hints), `effc660` (naming), and `5a655a8` (Word Search). Briefly open README, references and the source ZIP.
 
-## If something fails while recording
+> These are the checks for the build and browser workflows. The browser tests cover saving, editing, deleting and downloading activities, with desktop and mobile checks. There are also automated accessibility checks; they help catch issues, though they don't replace checking the interface manually.
+>
+> The commit history shows the changes over time, including the dictionary, the download fixes and the naming panels. The README has the setup instructions and repository link, and the supporting documents include the architecture and APA references. The source ZIP excludes node_modules and the local environment files.
 
-- If port 3001 is occupied, use `-p 3002:3000` and open port 3002.
-- If the container name exists, run `docker rm -f phoneme-builder-demo` before recording.
-- If the demonstration activity exists, delete it before starting the take.
-- If Docker Desktop is not running, stop recording, start it, wait for the engine, and begin a clean take.
-- Do not claim GitHub is current unless the latest commit is visibly present on the repository page.
+Only claim commits are on GitHub if you can show them there. Inspect the actual ZIP before describing its contents. Submit the required AI acknowledgement separately.
+
+## 9:25–9:55 — delete and finish
+
+In Word Dictionary, remove the custom `chat` entry and confirm. Refresh. In Activities, point out the saved Wordle still exists, then delete `Week 2 - CH revision` and confirm. Refresh again.
+
+> Finally, I'll remove the custom dictionary word. The activity still has its saved copy, which means changing the reusable dictionary doesn't wipe an existing teaching resource.
+>
+> Now I'll delete the demonstration Wordle as well. Deleting an activity removes its related word records. After refreshing, it's gone from the library.
+>
+> That's the full workflow: add the content, build an activity, save it, edit it and download it again. Thanks for watching.
+
+## Final rehearsal checklist
+
+- Student ID in the first 30 seconds; face and narration throughout.
+- Dictionary word created, read after refresh, updated and deleted.
+- Activity named, saved, reopened, edited and deleted.
+- Related word added, read back and removed with saves between changes.
+- Both newly downloaded HTML files opened and played.
+- Health response visibly shows HTTP 200; Docker visibly runs the app.
+- Actual check results and inspectable Git history shown.
+- AI acknowledgement and required submission documents completed.
+
+## Accuracy notes for preparation — do not read aloud
+
+- The dictionary supplies curated vocabulary and teacher-entered content, not automatic pronunciation for arbitrary words. Teachers still need to review phonemes and dialect choices.
+- Dictionary changes do not automatically alter existing saved activities.
+- Word Search saves selected words and grid size, not a frozen copy of its preview grid. A download can have a different arrangement.
+- Word Search now builds its preview from the checked words. Generation returns a complete puzzle or reports that the selection cannot fit; it does not silently omit targets. For a visible validation example, a custom word longer than the grid produces a message asking for a larger grid or removal of that word.
+- Automated accessibility tests do not establish that every custom phoneme has a useful tooltip. Check the exact files you will show.
+- No captions file was present at the previous readiness check. Show the About video, but do not claim it has captions unless they have been added and verified.
+- The spoken sections describe a successful demonstration. Only make claims about passing checks, GitHub or archive contents when the visible evidence supports them.

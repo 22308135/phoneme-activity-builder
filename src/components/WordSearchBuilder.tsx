@@ -27,8 +27,17 @@ export function WordSearchBuilder() {
   const [phonemeWords, setPhonemeWords] = useState(defaultPhonemeWords);
   const [enabled, setEnabled] = useState(phonemeWords.map((word) => word.id));
   const [gridSize, setGridSize] = useState(7);
+  const maxWords = gridSize >= 9 ? 20 : gridSize >= 8 ? 15 : 10;
   const [puzzleSeed, setPuzzleSeed] = useState(1);
-  const grid = useMemo(() => generateWordSearch(phonemeWords.map((word) => word.sounds), gridSize, puzzleSeed), [phonemeWords, gridSize, puzzleSeed]);
+  const puzzle = useMemo(() => {
+    if (enabled.length > maxWords) return { grid: [] as string[][], error: `This grid allows up to ${maxWords} words. Deselect ${enabled.length - maxWords} words or choose a larger grid.` };
+    try {
+      return { grid: generateWordSearch(phonemeWords.filter((word) => enabled.includes(word.id)).map((word) => word.sounds), gridSize, puzzleSeed), error: "" };
+    } catch (error) {
+      return { grid: [] as string[][], error: error instanceof Error ? error.message : "Could not generate this puzzle." };
+    }
+  }, [phonemeWords, enabled, gridSize, puzzleSeed, maxWords]);
+  const grid = puzzle.grid;
   const [start, setStart] = useState<number | null>(null);
   const [found, setFound] = useState<string[]>([]);
   const [foundCells, setFoundCells] = useState<number[]>([]);
@@ -69,14 +78,14 @@ export function WordSearchBuilder() {
   };
 
   const toggleWord = (id: string) => {
-    setEnabled((current) => current.includes(id) && current.length > 2 ? current.filter((word) => word !== id) : current.includes(id) ? current : current.length < 10 ? [...current, id] : current);
+    setEnabled((current) => current.includes(id) && current.length > 2 ? current.filter((word) => word !== id) : current.includes(id) ? current : current.length < maxWords ? [...current, id] : current);
     setActivityId(""); setActivityTitle(""); setPendingAction(null); setSaveMessage("");
     setFound([]); setFoundCells([]); setStart(null); setMessage("Click the first and last sound in a word.");
   };
 
   const beginSave = (action: "save" | "download") => { setPendingAction(action); setSaveMessage(""); if (!activityTitle) setActivityTitle("My phoneme Word Search"); };
   const saveActivity = async () => {
-    if (!pendingAction || !activityTitle.trim() || activeWords.length < 2) return;
+    if (!pendingAction || !activityTitle.trim() || activeWords.length < 2 || puzzle.error) return;
     const download = pendingAction === "download"; setSaving(true); setSaveMessage("Saving to Activities…");
     const payload = { title: activityTitle.trim(), type: "WORD_SEARCH", difficulty: "FOUNDATION", gridSize, hintEnabled: true, words: activeWords.map((word) => ({ text: word.id, phonemes: word.sounds, hint: word.hint, isTarget: false })) };
     const response = await fetch(activityId ? `/api/activities/${activityId}` : "/api/activities", { method: activityId ? "PUT" : "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
@@ -88,11 +97,11 @@ export function WordSearchBuilder() {
 
   return <section className="builder-grid">
     <aside className="control-panel" aria-label="Word Search settings">
+      {puzzle.error && <p role="alert">{puzzle.error}</p>}
       <p className="eyebrow">Activity settings</p><h1>Build a phoneme Word Search</h1>
       <label>Grid size<select value={gridSize} onChange={(event) => { setGridSize(Number(event.target.value)); setActivityId(""); setActivityTitle(""); setPendingAction(null); setSaveMessage(""); setPuzzleSeed((seed) => seed + 1); setStart(null); setFound([]); setFoundCells([]); setMessage("New grid generated. Click the first and last sound in a word."); }}><option value="7">7 × 7</option><option value="8">8 × 8</option><option value="9">9 × 9</option></select></label>
-      <fieldset className="word-picker"><legend>Target words</legend><p className="field-help">Choose 2–10 words. {enabled.length} currently selected.</p><label className="word-filter">Find a word<input type="search" value={filter} onChange={(event) => setFilter(event.target.value)} placeholder="Search dictionary…" /></label><div className="word-picker-list">{visibleWords.map((word) => <label className="check-row" key={word.id}><input type="checkbox" checked={enabled.includes(word.id)} disabled={(enabled.includes(word.id) && enabled.length === 2) || (!enabled.includes(word.id) && enabled.length === 10)} onChange={() => toggleWord(word.id)} /> <span>{word.id}<small>{displaySounds(word.sounds)}</small></span></label>)}</div></fieldset>
-      <div className="tip"><strong>Mixed directions</strong><br />Words run horizontally, vertically, diagonally and backwards. Click the first and last sound to select one.</div>
-      <div className="builder-actions"><button type="button" className="button secondary" disabled={saving} onClick={() => beginSave("save")}>Save Word Search to Activities</button><button type="button" className="button primary" disabled={saving} onClick={() => beginSave("download")}>Generate &amp; download HTML <span aria-hidden="true">↓</span></button></div>
+      <fieldset className="word-picker"><legend>Target words</legend><p className="field-help">Choose 2–{maxWords} words. {enabled.length} currently selected.</p><label className="word-filter">Find a word<input type="search" value={filter} onChange={(event) => setFilter(event.target.value)} placeholder="Search dictionary…" /></label><div className="word-picker-list">{visibleWords.map((word) => <label className="check-row" key={word.id}><input type="checkbox" checked={enabled.includes(word.id)} disabled={(enabled.includes(word.id) && enabled.length === 2) || (!enabled.includes(word.id) && enabled.length >= maxWords)} onChange={() => toggleWord(word.id)} /> <span>{word.id}<small>{displaySounds(word.sounds)}</small></span></label>)}</div></fieldset>
+      <div className="builder-actions"><button type="button" className="button secondary" disabled={saving || Boolean(puzzle.error)} onClick={() => beginSave("save")}>Save Word Search to Activities</button><button type="button" className="button primary" disabled={saving || Boolean(puzzle.error)} onClick={() => beginSave("download")}>Generate &amp; download HTML <span aria-hidden="true">↓</span></button></div>
       {pendingAction && <div className="save-panel"><label htmlFor="search-activity-title">Activity name</label><input id="search-activity-title" autoFocus required maxLength={120} value={activityTitle} onChange={(event) => setActivityTitle(event.target.value)} /><div className="save-panel-actions"><button type="button" className="button primary" disabled={saving || activityTitle.trim().length < 2} onClick={saveActivity}>{pendingAction === "download" ? "Save & download" : "Confirm save"}</button><button type="button" className="button secondary" disabled={saving} onClick={() => setPendingAction(null)}>Cancel</button></div></div>}
       <p className="save-message" role="status">{saveMessage}</p>
     </aside>

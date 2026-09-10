@@ -1,6 +1,46 @@
 import { expect, test } from "@playwright/test";
 import axe from "axe-core";
 
+test("Word Search limits grow with grid size and preserve selection when shrinking", async ({ page }) => {
+  await page.goto("/word-search");
+  const boxes = page.locator(".word-picker-list input[type=checkbox]");
+  await expect(boxes).toHaveCount(26);
+  for (let index = 5; index < 10; index++) await boxes.nth(index).check();
+  await expect(boxes.nth(10)).toBeDisabled();
+  await page.getByLabel("Grid size").selectOption("8");
+  for (let index = 10; index < 15; index++) await boxes.nth(index).check();
+  await expect(boxes.nth(15)).toBeDisabled();
+  await page.getByLabel("Grid size").selectOption("9");
+  for (let index = 15; index < 20; index++) await boxes.nth(index).check();
+  await expect(boxes.nth(20)).toBeDisabled();
+  await expect(page.locator(".search-grid button")).toHaveCount(81);
+  await page.getByLabel("Grid size").selectOption("7");
+  await expect(page.locator(".word-picker-list input:checked")).toHaveCount(20);
+  await expect(page.locator(".control-panel [role=alert]")).toContainText("Deselect 10 words");
+  await expect(page.getByRole("button", { name: /Generate & download/ })).toBeDisabled();
+});
+
+test("Word Search rebuilds from checked words and blocks words that cannot fit", async ({ page }) => {
+  const entries = Array.from({ length: 6 }, (_, index) => ({ word: `word${index}`, phonemes: [String(index), String(index)], hint: "Test word" }));
+  entries.push({ word: "oversized", phonemes: Array(10).fill("long"), hint: "Too long" });
+  await page.route("**/api/dictionary", (route) => route.fulfill({ json: entries }));
+  await page.goto("/word-search");
+  const cells = page.locator(".search-grid button");
+  await expect(cells).toHaveCount(49);
+  await expect(page.getByRole("checkbox", { name: /word5/ })).not.toBeChecked();
+  await expect(page.locator(".search-grid")).not.toContainText("/5/");
+  await page.getByRole("checkbox", { name: /word5/ }).check();
+  await expect(page.locator(".search-grid")).toContainText("/5/");
+  await page.getByRole("checkbox", { name: /word5/ }).uncheck();
+  await expect(page.locator(".search-grid")).not.toContainText("/5/");
+  await page.getByRole("checkbox", { name: /oversized/ }).check();
+  await expect(page.locator(".control-panel").getByRole("alert")).toContainText("too long");
+  await expect(cells).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /Generate & download/ })).toBeDisabled();
+  await page.getByRole("checkbox", { name: /oversized/ }).uncheck();
+  await expect(cells).toHaveCount(49);
+});
+
 test("health, CRUD, phonemes, and stored download work", async ({ request }, testInfo) => {
   test.skip(testInfo.project.name !== "desktop-edge", "API workflow only needs one browser project");
   const health = await request.get("/health");

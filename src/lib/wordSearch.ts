@@ -29,16 +29,24 @@ function seededRandom(seed: number) {
   };
 }
 
-export function generateWordSearch(words: string[][], size: number, seed: number) {
-  const random = seededRandom(seed);
-  const grid: (string | null)[][] = Array.from({ length: size }, () => Array(size).fill(null));
+export class WordSearchPlacementError extends Error {}
 
-  for (const word of words) {
-    let placed = false;
-    for (let attempt = 0; attempt < 300 && !placed; attempt += 1) {
-      const [rowStep, columnStep] = DIRECTIONS[Math.floor(random() * DIRECTIONS.length)];
-      const row = Math.floor(random() * size);
-      const column = Math.floor(random() * size);
+export function generateWordSearch(words: string[][], size: number, seed: number) {
+  if (!Number.isInteger(size) || size < 1 || size > 12 || !words.length || words.some((word) => !word.length || word.some((sound) => !sound.trim()))) {
+    throw new WordSearchPlacementError("Choose valid words and a grid size from 1 to 12.");
+  }
+  if (words.some((word) => word.length > size)) {
+    throw new WordSearchPlacementError("A selected word is too long for this grid. Choose a larger grid or remove that word.");
+  }
+  const random = seededRandom(seed);
+  const orderedWords = [...words].sort((a, b) => b.length - a.length);
+  for (let restart = 0; restart < 80; restart++) {
+  const grid: (string | null)[][] = Array.from({ length: size }, () => Array(size).fill(null));
+  let complete = true;
+  for (const word of orderedWords) {
+    const candidates: Array<{ row: number; column: number; rowStep: number; columnStep: number }> = [];
+    for (const [rowStep, columnStep] of DIRECTIONS) {
+      for (let row = 0; row < size; row++) for (let column = 0; column < size; column++) {
       const endRow = row + rowStep * (word.length - 1);
       const endColumn = column + columnStep * (word.length - 1);
       if (endRow < 0 || endRow >= size || endColumn < 0 || endColumn >= size) continue;
@@ -49,12 +57,14 @@ export function generateWordSearch(words: string[][], size: number, seed: number
       });
       if (!fits) continue;
 
-      word.forEach((sound, index) => {
-        grid[row + rowStep * index][column + columnStep * index] = sound;
-      });
-      placed = true;
+      candidates.push({ row, column, rowStep, columnStep });
+      }
     }
+    if (!candidates.length) { complete = false; break; }
+    const { row, column, rowStep, columnStep } = candidates[Math.floor(random() * candidates.length)];
+    word.forEach((sound, index) => { grid[row + rowStep * index][column + columnStep * index] = sound; });
   }
-
-  return grid.map((row) => row.map((sound) => sound ?? FILLER_SOUNDS[Math.floor(random() * FILLER_SOUNDS.length)]));
+  if (complete) return grid.map((row) => row.map((sound) => sound ?? FILLER_SOUNDS[Math.floor(random() * FILLER_SOUNDS.length)]));
+  }
+  throw new WordSearchPlacementError("Could not fit every selected word. Choose a larger grid or fewer words, then try again.");
 }
