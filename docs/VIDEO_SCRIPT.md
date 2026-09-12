@@ -114,14 +114,21 @@ Open Word Search. Keep the initial five selected words. Search for `chat`, check
 
 ## 6:20–7:25 — explain the backend and schema
 
-Show the Prisma schema, `src/lib/activity.ts`, and the activity PUT route. Point to the relevant fields and transaction as you explain them.
+Open these three files in VS Code tabs before recording. Switch between them at the cues below; the cues are not read aloud.
+
+**On screen — `prisma/schema.prisma`:** Keep this file open for the next two paragraphs. First point to `provider = "sqlite"` in the datasource, then scroll through the `Activity`, `Word`, and `DictionaryWord` models as you mention them. Point to the activity settings, the Word fields and its `activityId` relationship, then the separate dictionary model.
 
 > This is a Next.js project using the create-next-app starter. The React pages call the API routes, the routes validate the data, and Prisma handles reading and writing to SQLite.
 >
 > Activity stores things like the title, type, difficulty and grid size. Each activity has related Word records, with the written word, hint, position and target flag. DictionaryWord is separate because those entries are reusable vocabulary. A saved activity keeps its own copy of the words.
 >
-> The phonemes are stored as a JSON array. For chat, that's these three entries: tʃ, æ and t. That matters because tʃ is one sound token even though it uses more than one character.
->
+
+**On screen — `src/lib/activity.ts`:** Switch to this tab and scroll to the `prismaActivityData` function. Point to `phonemes: JSON.stringify(word.phonemes)` while explaining storage.
+
+> The phonemes are stored as a JSON array encoded as text. For chat, that's these three entries: tʃ, æ and t. That matters because tʃ is one sound token even though it uses more than one character.
+
+**On screen — `src/app/api/activities/[id]/route.ts`:** Switch to this tab and scroll to the `PUT` function. Point to `prisma.$transaction`, then `database.word.deleteMany` and `database.activity.update` inside it.
+
 > This update runs inside a transaction. It replaces the activity's word rows and updates the settings together, so they either succeed together or roll back together.
 
 ## 7:25–8:05 — validation and errors
