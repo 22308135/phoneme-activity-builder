@@ -36,7 +36,7 @@ Phoneme Play Builder is a database-backed Next.js application for Speech Patholo
 - Teachers can enter and store their own words, ordered phonemes, hints, targets, and activity settings.
 - Phoneme help appears on both pointer hover and keyboard focus in the live builders and downloaded HTML.
 - Standalone HTML generation lives in `src/lib/gameHtml.ts`; the download button only handles the browser download action.
-- The repository URL and an inspectable development-history summary are included in the submission documentation, and the video script requires a live Git-history demonstration.
+- The repository URL and an inspectable development-history summary are included in the submission documentation.
 
 ## Technology
 
@@ -111,8 +111,6 @@ Open `http://localhost:3000` and `/health`. Startup applies migrations, seeds an
 
 - [Architecture and design](docs/ARCHITECTURE.md)
 - [APA 7 references](docs/REFERENCES.md)
-- [Video walkthrough script](docs/VIDEO_SCRIPT.md)
-- [Submission checklist](docs/SUBMISSION_CHECKLIST.md)
 - [Git development history](docs/GIT_HISTORY.md)
 
 ## Known limitations
