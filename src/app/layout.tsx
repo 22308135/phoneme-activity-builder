@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PreferenceProvider } from "@/components/PreferenceProvider";
+import { UsageTracker } from "@/components/UsageTracker";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body><PreferenceProvider>{children}</PreferenceProvider></body>
+      <body><PreferenceProvider><UsageTracker />{children}</PreferenceProvider></body>
     </html>
   );
 }

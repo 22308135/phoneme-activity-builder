@@ -4,10 +4,11 @@ export default defineConfig({
   testDir: "./tests/browser",
   fullyParallel: false,
   workers: 1,
-  reporter: [["list"], ["html", { open: "never" }]],
-  use: { baseURL: "http://127.0.0.1:3100", channel: "msedge", trace: "retain-on-failure", screenshot: "only-on-failure" },
+  outputDir: process.env.PLAYWRIGHT_RESULTS_DIR ?? "test-results",
+  reporter: [["list"], ["html", { open: "never" }], ["json", { outputFile: process.env.PLAYWRIGHT_JSON_OUTPUT_FILE ?? "test-results/results.json" }]],
+  use: { baseURL: "http://127.0.0.1:3100", channel: process.env.PLAYWRIGHT_BROWSER_CHANNEL ?? "chrome", trace: "on", screenshot: "only-on-failure" },
   projects: [
-    { name: "desktop-edge", use: { ...devices["Desktop Edge"] } },
-    { name: "mobile-edge", use: { ...devices["Pixel 7"] } },
+    { name: "desktop", use: { ...devices["Desktop Chrome"] } },
+    { name: "mobile", use: { ...devices["Pixel 7"] } },
   ],
 });

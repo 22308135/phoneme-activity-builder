@@ -6,6 +6,7 @@ import { useState } from "react";
 
 const links = [
   ["Home", "/"],
+  ["Dashboard", "/dashboard"],
   ["Activities", "/activities"],
   ["Word Dictionary", "/dictionary"],
   ["Wordle", "/wordle"],
@@ -19,7 +20,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
   return <div className="site-shell">
     <a className="skip-link" href="#main-content">Skip to main content</a>
     <header className="site-header">
-      <Link className="brand" href="/" aria-label="Phoneme Play Builder home">
+      <Link className="brand" href="/">
         <span className="brand-mark" aria-hidden="true">/ə/</span>
         <span>Phoneme Play <small>builder</small></span>
       </Link>
@@ -29,12 +30,13 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
       <div className="menu-wrap">
         <button className="menu-button" aria-expanded={open} aria-controls="more-menu" onClick={() => setOpen(!open)}>Menu <span aria-hidden="true">☰</span></button>
         {open && <div id="more-menu" className="more-menu">
+          {links.map(([label, href]) => <Link className="mobile-nav-link" key={href} href={href} onClick={() => setOpen(false)} aria-current={pathname === href ? "page" : undefined}>{label}</Link>)}
           <Link href="/about" onClick={() => setOpen(false)}>About</Link>
           <Link href="/settings" onClick={() => setOpen(false)}>Settings</Link>
         </div>}
       </div>
     </header>
     <main id="main-content">{children}</main>
-    <footer><span>Phoneme Play Builder · Assessment 2</span><span>Louis Callander · 22308135</span></footer>
+    <footer><span>Phoneme Play Builder · Assessment 3</span><span>Louis Callander · 22308135</span></footer>
   </div>;
 }

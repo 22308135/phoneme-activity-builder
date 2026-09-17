@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import axe from "axe-core";
+import { pathToFileURL } from "node:url";
 
 test("Word Search limits grow with grid size and preserve selection when shrinking", async ({ page }) => {
   await page.goto("/word-search");
@@ -41,8 +42,8 @@ test("Word Search rebuilds from checked words and blocks words that cannot fit",
   await expect(cells).toHaveCount(49);
 });
 
-test("health, CRUD, phonemes, and stored download work", async ({ request }, testInfo) => {
-  test.skip(testInfo.project.name !== "desktop-edge", "API workflow only needs one browser project");
+test("health, stored phonemes, and download API work", async ({ request }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop", "API workflow only needs one browser project");
   const health = await request.get("/health");
   expect(health.status()).toBe(200);
   expect(await health.json()).toEqual({ status: "ok", database: "connected" });
@@ -99,8 +100,7 @@ test("teacher can create, edit, and delete through the interface", async ({ page
   await expect(page.getByRole("status")).toContainText("zap removed");
 });
 
-test("generating Wordle HTML also saves it to Activities", async ({ page, request }, testInfo) => {
-  test.skip(testInfo.project.name !== "desktop-edge", "Download workflow only needs one browser project");
+test("learner can open, complete, and reset a generated Wordle", async ({ page, request }, testInfo) => {
   const activityTitle = "Automated downloaded Wordle";
   const existing = await (await request.get("/api/activities?type=WORDLE")).json();
   for (const activity of existing.filter((item: { title: string }) => item.title === activityTitle)) await request.delete(`/api/activities/${activity.id}`);
@@ -110,16 +110,26 @@ test("generating Wordle HTML also saves it to Activities", async ({ page, reques
   await page.getByLabel("Activity name").fill(activityTitle);
   const download = page.waitForEvent("download");
   await page.getByRole("button", { name: "Save & download" }).click();
-  await download;
+  const file = testInfo.outputPath("wordle.html");
+  await (await download).saveAs(file);
+  await testInfo.attach("Generated Wordle", { path: file, contentType: "text/html" });
   await expect(page.locator(".save-message")).toContainText(activityTitle);
   const saved = await (await request.get("/api/activities?type=WORDLE")).json();
   const created = saved.find((item: { title: string }) => item.title === activityTitle);
   expect(created).toBeTruthy();
+  await page.context().setOffline(true);
+  await page.goto(pathToFileURL(file).href);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(activityTitle);
+  for (const sound of ["tʃ", "ɪ", "p"]) await page.getByRole("button", { name: new RegExp(`^/${sound}/,`) }).click();
+  await page.getByRole("button", { name: "Enter", exact: true }).click();
+  await expect(page.locator("#message")).toHaveText("Completed — the English word is chip.");
+  await page.getByRole("button", { name: "Reset activity" }).click();
+  await expect(page.locator("#message")).toHaveText("Choose the phonemes in order.");
+  await page.context().setOffline(false);
   await request.delete(`/api/activities/${created.id}`);
 });
 
-test("Word Search uses the dictionary and saves before download", async ({ page, request }, testInfo) => {
-  test.skip(testInfo.project.name !== "desktop-edge", "Download workflow only needs one browser project");
+test("learner can open, complete, and reset a generated Word Search", async ({ page, request }, testInfo) => {
   const activityTitle = "Automated dictionary Word Search";
   const existing = await (await request.get("/api/activities?type=WORD_SEARCH")).json();
   for (const activity of existing.filter((item: { title: string }) => item.title === activityTitle)) await request.delete(`/api/activities/${activity.id}`);
@@ -130,20 +140,79 @@ test("Word Search uses the dictionary and saves before download", async ({ page,
   await page.getByLabel("Activity name").fill(activityTitle);
   const download = page.waitForEvent("download");
   await page.getByRole("button", { name: "Save & download" }).click();
-  await download;
+  const file = testInfo.outputPath("word-search.html");
+  await (await download).saveAs(file);
+  await testInfo.attach("Generated Word Search", { path: file, contentType: "text/html" });
   await expect(page.locator(".save-message")).toContainText(activityTitle);
   const saved = await (await request.get("/api/activities?type=WORD_SEARCH")).json();
   const created = saved.find((item: { title: string }) => item.title === activityTitle);
   expect(created.words).toHaveLength(6);
+  await page.context().setOffline(true);
+  await page.goto(pathToFileURL(file).href);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(activityTitle);
+  const cells = page.locator("#search-grid button");
+  const sounds = (await cells.allTextContents()).map((text) => text.slice(1, -1));
+  const size = Math.sqrt(sounds.length);
+  for (const word of created.words as Array<{ phonemes: string[] }>) {
+    let endpoints: number[] | undefined;
+    for (let start = 0; start < sounds.length && !endpoints; start++) {
+      for (const dx of [-1, 0, 1]) for (const dy of [-1, 0, 1]) {
+        if (dx === 0 && dy === 0) continue;
+        const indices = word.phonemes.map((_, offset) => {
+          const x = start % size + dx * offset;
+          const y = Math.floor(start / size) + dy * offset;
+          return x >= 0 && x < size && y >= 0 && y < size ? y * size + x : -1;
+        });
+        if (indices.every((index, offset) => index >= 0 && sounds[index] === word.phonemes[offset])) endpoints = [indices[0], indices.at(-1)!];
+      }
+    }
+    expect(endpoints, `Visible grid must contain ${word.phonemes.join(" ")}`).toBeDefined();
+    await cells.nth(endpoints![0]).click();
+    await cells.nth(endpoints![1]).click();
+  }
+  await expect(page.locator("#message")).toHaveText("Completed — you found every phoneme word!");
+  await expect(page.locator("#targets .found-word")).toHaveCount(6);
+  await page.getByRole("button", { name: "Reset activity" }).click();
+  await expect(page.locator("#targets .found-word")).toHaveCount(0);
+  await page.context().setOffline(false);
   await request.delete(`/api/activities/${created.id}`);
 });
 
 test("key pages have no serious automated accessibility violations", async ({ page }) => {
-  for (const route of ["/", "/about", "/settings", "/activities", "/dictionary", "/wordle", "/word-search"]) {
+  for (const route of ["/", "/dashboard", "/about", "/settings", "/activities", "/dictionary", "/wordle", "/word-search"]) {
     await page.goto(route);
+    if (route === "/dashboard") await expect(page.getByRole("button", { name: "Refresh dashboard" })).toBeEnabled();
     await page.addScriptTag({ content: axe.source });
     const results = await page.evaluate(async () => await (window as typeof window & { axe: { run: () => Promise<{ violations: Array<{ impact: string | null; id: string }> }> } }).axe.run());
     expect(results.violations.filter((violation) => violation.impact === "serious" || violation.impact === "critical"), route).toEqual([]);
+  }
+});
+
+test("Home opens the dashboard and refresh shows persisted generation metrics", async ({ page, request }) => {
+  await page.goto("/");
+  await page.getByRole("link", { name: "View dashboard", exact: true }).click();
+  await expect(page).toHaveURL(/\/dashboard$/);
+  await expect(page.locator(".dashboard-health")).toContainText("System healthy");
+  const baseline = await (await request.get("/api/dashboard")).json();
+  const metric = (label: string) => page.locator(".dashboard-metric").filter({ has: page.locator("dt", { hasText: label }) }).locator(".dashboard-metric-value");
+  const response = await request.post("/api/activities", { data: {
+    title: "Dashboard browser evidence", type: "WORDLE", difficulty: "FOUNDATION", hintEnabled: true, gridSize: null,
+    words: [{ text: "chip", phonemes: ["tʃ", "ɪ", "p"], hint: "A small piece", isTarget: true }],
+  } });
+  expect(response.status()).toBe(201);
+  const created = await response.json();
+  try {
+    expect((await request.get(`/api/activities/${created.id}/download`)).status()).toBe(200);
+    await page.getByRole("button", { name: "Refresh dashboard" }).click();
+    await expect(metric("Wordle activities")).toHaveText(String(baseline.library.wordle + 1));
+    await expect(metric("Successful generations")).toHaveText(String(baseline.usage.successfulGenerations + 1));
+    await expect(page.locator(".dashboard-table")).toContainText(created.title);
+    expect((await request.delete(`/api/activities/${created.id}`)).status()).toBe(204);
+    await page.reload();
+    await expect(metric("Wordle activities")).toHaveText(String(baseline.library.wordle));
+    await expect(metric("Successful generations")).toHaveText(String(baseline.usage.successfulGenerations + 1));
+  } finally {
+    await request.delete(`/api/activities/${created.id}`);
   }
 });
 

@@ -51,3 +51,23 @@ model DictionaryWord {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// Independent of Activity so deleting a puzzle does not erase usage history.
+model GenerationEvent {
+  id           Int           @id @default(autoincrement())
+  activityType ActivityType?
+  successful   Boolean
+  createdAt    DateTime      @default(now())
+
+  @@index([successful])
+}
+
+// Anonymous builder visits; no names, IP addresses or student results.
+model PageVisit {
+  id           String       @id
+  activityType ActivityType
+  durationMs   Int          @default(0)
+  createdAt    DateTime     @default(now())
+
+  @@index([activityType])
+}

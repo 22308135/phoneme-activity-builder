@@ -6,11 +6,12 @@ Phoneme Play Builder is a database-backed Next.js application for Speech Patholo
 
 - Louis Callander
 - Student number: 22308135
-- Assessment 2: Backend and Database Development
+- Assessment 3: Data-driven Application and Reporting (dashboard stage)
 - GitHub: https://github.com/22308135/phoneme-activity-builder
 
 ## Assessment features
 
+- Operational dashboard at `/dashboard` with saved resource summaries, live health, generation results and anonymous builder usage
 - Custom-content forms and live previews together on `/wordle` and `/word-search`, with saved puzzles managed at `/activities`
 - Direct saved-puzzle HTML downloads plus focused editing at `/activities/:id/edit`
 - Teacher-entered words, ordered phonemes, English labels, and hints rather than fixed activity-only content
@@ -49,7 +50,7 @@ Phoneme Play Builder is a database-backed Next.js application for Speech Patholo
 
 ## Local setup
 
-Requirements: Node.js 22 LTS and npm. The Docker image uses Node.js 22 to keep the Prisma engine and application runtime reproducible.
+Requirements: Node.js 22.19+ and npm. The Docker image uses Node.js 22 to keep the Prisma engine and application runtime reproducible. Lighthouse audits also need an installed Chrome/Chromium browser.
 
 ```powershell
 Copy-Item .env.example .env
@@ -70,15 +71,56 @@ npm run lint
 npm run test
 npm run build
 npm run test:browser
+npm run test:lighthouse
 ```
 
-Unit tests cover schemas and activity generation. Browser tests check health, CRUD, downloads, desktop/mobile behaviour, and serious or critical axe accessibility violations in installed Microsoft Edge.
+Unit tests cover schemas, activity generation and dashboard metrics. Browser tests use installed Google Chrome at desktop and emulated Pixel 7 sizes. They check teacher CRUD, downloading and completing both games offline, dashboard refresh and persisted generation counts, settings and serious/critical axe accessibility violations. Set `PLAYWRIGHT_BROWSER_CHANNEL=msedge` to use installed Edge instead.
+
+`npm run test:browser` builds the app, migrates and seeds a temporary SQLite database, and starts a separate production server on `127.0.0.1:3100`. Your normal database is untouched. Timestamped HTML reports, JSON results, traces and generated games are saved under `artifacts/playwright/`. See [recorded results and report instructions](docs/PLAYWRIGHT_RESULTS.md).
+
+Dashboard integration tests run with `npm test` against a disposable SQLite database. They apply the committed migrations and check empty states, resource counts, dictionary overrides, visit deduplication, timing validation, generation outcomes and database failures. They do not alter your local activity database.
+
+## Assessment 3 dashboard
+
+Open `/dashboard` from the main navigation (or Menu on mobile). It refreshes every 30 seconds and also has a manual refresh button. Existing installations must run `npm run db:generate` and `npm run db:deploy` before starting the updated app; Docker applies migrations at startup.
+
+- **Resources:** counts of currently saved Wordle and Word Search activities, stored word entries (including repeated words), and unique dictionary words. Custom entries override matching curated dictionary words without being counted twice. Deleting an activity reduces these library totals; these are not lifetime creation counters.
+- **Generation:** each saved-activity or preview HTML download endpoint request records one success or failure. Success means the server prepared an HTML response, not that the recipient opened the file. Failed requests without a valid activity have no activity type. Live preview resets and client-side validation warnings are excluded.
+- **Builder usage:** an anonymous visit starts on entry to `/wordle` or `/word-search`. Visible time is reported every 15 seconds, when visibility changes and on leaving. Each visit has a random ID; repeated/out-of-order updates cannot inflate visits or reduce recorded time. Durations are bounded at 24 hours per visit. No names, IP addresses or student responses are collected.
+- **Average time:** total reported visible time divided by recorded builder visits, including ongoing visits. It is approximate if a browser closes before its final update. Most-used type is based on builder visits; ties and no-data states are displayed explicitly.
+- **History:** generation and visit records survive activity deletion. Tracking starts with this version; past downloads are not reconstructed and seed data does not invent historical usage. Offline downloaded games do not send telemetry.
+- **Availability:** health is checked independently of dashboard metrics. A failed refresh preserves the previous figures with a stale-data notice. If recording a generation metric fails, the server logs the problem and still serves the puzzle, so counts can under-report during a metrics outage.
+
+The dashboard stage is implemented. JMeter and Lighthouse evidence are documented below; the Assessment 3 video remains separate work.
+
+## JMeter load testing
+
+The reproducible JMeter plan tests both builders, stored phonemes, activity creation, generated HTML downloads, deletion and dashboard summaries. The runner uses a separate production server and fresh temporary databases, keeping your saved activities untouched.
+
+```powershell
+powershell -NoProfile -File scripts/setup-jmeter.ps1
+npm run test:load
+```
+
+The full run includes a smoke check followed by 1, 10, 25, 50 and 100 concurrent users, each for 60 seconds including ramp-up. Reports and raw samples are written to `artifacts/jmeter/`. See [test instructions and methodology](tests/load/README.md) and [recorded results](docs/LOAD_TEST_RESULTS.md).
+
+## Lighthouse accessibility
+
+```powershell
+npm run test:lighthouse -- --label=check
+```
+
+This builds the production app and audits Home, Dashboard, Wordle and Word Search at desktop and mobile widths in both light and dark themes. Lighthouse snapshot mode waits for loaded content before checking accessibility. HTML and JSON reports are saved under `artifacts/lighthouse/`; it does not measure performance or certify WCAG compliance.
+
+The runner starts an isolated local server on port 3300 and uses a temporary seeded database and browser profile. It does not change your normal data or browser preferences. Chrome is detected at common installation paths; set `CHROME_PATH` if needed. See [before/after findings and video notes](docs/ACCESSIBILITY_RESULTS.md) and the selected reports in `docs/evidence/`.
 
 ## API
 
 | Method | Route | Result |
 | --- | --- | --- |
 | `GET` | `/health` | Returns 200 when the app can query its database |
+| `GET` | `/api/dashboard` | Database-backed resource, generation and builder usage summaries |
+| `POST` | `/api/usage` | Validates and records an anonymous builder visit or cumulative visible-time update |
 | `GET` | `/api/activities` | Lists activities; accepts `?type=WORDLE` or `WORD_SEARCH` |
 | `POST` | `/api/activities` | Validates and creates an activity and its words |
 | `GET` | `/api/activities/:id` | Retrieves one activity and its ordered words |
@@ -109,9 +151,13 @@ Open `http://localhost:3000` and `/health`. Startup applies migrations, seeds an
 
 ## Supporting assessment documents
 
+- [Assessment 3 notes — requirements, results, video plan and submission checklist](docs/ASSESSMENT_3_NOTES.md)
 - [Architecture and design](docs/ARCHITECTURE.md)
 - [APA 7 references](docs/REFERENCES.md)
 - [Git development history](docs/GIT_HISTORY.md)
+- [JMeter results](docs/LOAD_TEST_RESULTS.md)
+- [Lighthouse accessibility results](docs/ACCESSIBILITY_RESULTS.md)
+- [Playwright browser results](docs/PLAYWRIGHT_RESULTS.md)
 
 ## Known limitations
 
@@ -123,4 +169,4 @@ Open `http://localhost:3000` and `/health`. Startup applies migrations, seeds an
 
 ## Submission
 
-Do not include `.env`, `.db` files, `node_modules`, `.next`, test reports, or editor metadata in the ZIP. Include the GitHub link, video, required AI acknowledgement, and APA 7 references.
+Do not include `.env`, `.db` files, `node_modules`, `.next`, transient `artifacts/` output or editor metadata in the ZIP. Keep the selected assessment evidence archives in `docs/evidence/`. Include the GitHub link, video, required AI acknowledgement, and APA 7 references.

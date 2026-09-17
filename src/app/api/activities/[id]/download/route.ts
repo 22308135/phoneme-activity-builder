@@ -3,14 +3,30 @@ import { createGameHtml } from "@/lib/gameHtml";
 import { parsePhonemes } from "@/lib/activity";
 import { prisma } from "@/lib/prisma";
 import { generateWordSearch, WordSearchPlacementError } from "@/lib/wordSearch";
+import { recordGeneration } from "@/lib/generationMetrics";
+import type { ActivityType } from "@prisma/client";
 
 const difficultyNames = { FOUNDATION: "Foundation", DEVELOPING: "Developing", EXTENDING: "Extending" } as const;
 
 export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const id = Number((await params).id);
+  const context: { activityType: ActivityType | null } = { activityType: null };
+  try {
+    const response = await generate((await params).id, context);
+    await recordGeneration(context.activityType, response.ok);
+    return response;
+  } catch (error) {
+    console.error("Could not generate saved activity", error);
+    await recordGeneration(context.activityType, false);
+    return NextResponse.json({ error: "Could not generate activity. Please try again." }, { status: 500 });
+  }
+}
+
+async function generate(rawId: string, context: { activityType: ActivityType | null }) {
+  const id = Number(rawId);
   if (!Number.isInteger(id)) return NextResponse.json({ error: "Invalid activity ID" }, { status: 400 });
   const activity = await prisma.activity.findUnique({ where: { id }, include: { words: { orderBy: { position: "asc" } } } });
   if (!activity) return NextResponse.json({ error: "Activity not found" }, { status: 404 });
+  context.activityType = activity.type;
   const words = activity.words.map((word) => ({ ...word, sounds: parsePhonemes(word.phonemes) }));
   if (!words.length || words.some((word) => !word.sounds.length)) return NextResponse.json({ error: "The saved activity contains invalid phoneme data" }, { status: 422 });
 

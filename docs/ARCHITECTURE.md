@@ -69,7 +69,17 @@ erDiagram
 - Type and difficulty use closed enums.
 - Malformed JSON, invalid IDs, missing records, and invalid persisted phonemes receive distinct responses.
 
-## Docker design
+## Dashboard data flow
+
+`/dashboard` fetches `/api/dashboard` and `/health` independently every 30 seconds. A Prisma transaction collects consistent library counts, difficulty groups, recent configurations, generation outcomes and visit aggregates. Curated and custom dictionary names are deduplicated. Empty metrics remain zero or explicitly unavailable; no simulated usage is added to the operational figures.
+
+`GenerationEvent` stores a nullable activity type, success flag and timestamp for each HTML download endpoint response. Events have no foreign key to an activity, so deleting classroom resources does not erase monitoring history. Metrics writes are best-effort and log a server error on failure without breaking an otherwise valid download.
+
+`PageVisit` stores an anonymous UUID, activity type, cumulative visible duration and creation time. The root layout's tracker runs only on builder routes. The usage endpoint validates its payload and transactionally upserts a visit, then advances its duration only when the new value is greater. Duplicate, reordered, hidden-tab and navigation updates do not double-count elapsed time. Browser-reported measurements are approximate, not authenticated audit records. No student identifiers or game results are collected.
+
+The dashboard labels library totals as current saved records and usage as recorded history. Average page time includes ongoing visits; most-used type means the builder with more recorded page visits. The SQLite migration adds two tables without modifying existing activities, words or dictionary entries.
+
+## Docker runtime
 
 The multi-stage Dockerfile installs locked dependencies, generates Prisma Client, and builds Next.js. Startup applies committed migrations and runs an idempotent seed. `DATABASE_URL=file:/data/activities.db` places SQLite in a named volume. Docker’s health check requests `/health`, which also verifies database access.
 
