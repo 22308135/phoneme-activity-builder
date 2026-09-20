@@ -11,6 +11,17 @@ Phoneme Play Builder is a database-backed Next.js application for Speech Patholo
 
 ## Assessment features
 
+### Assessment 3 reporting (first increment)
+
+- `/dashboard` shows current saved activity and word counts, successful/failed generations, most-used type, recent events, empty-list warnings and a live `/health` check.
+- Generation reports support rolling 7-day, 30-day and all-time windows. Current library totals are not date-filtered.
+- `/api/dashboard?days=7|30|all` exposes the database-backed report; the default is 30 days.
+- Saved-activity HTML requests record one generation outcome, including failures. History survives activity deletion; repeat downloads count separately. Tracking begins when this version is installed, with no invented historical usage.
+- Unsaved preview downloads and offline game play are not included. Page-time tracking, simulated data, trend charts, JMeter and Lighthouse evidence are still planned.
+- Monitoring writes are best-effort: failures are logged to the server console without blocking a valid download. Database outages may therefore leave gaps in generation history.
+
+For an existing local database created with `db:setup`, run `npx prisma db push` and restart the app. For a database managed by migrations (including Docker), run `npm run db:deploy`. Both approaches add the generation-event table without deleting activities.
+
 - Custom-content forms and live previews together on `/wordle` and `/word-search`, with saved puzzles managed at `/activities`
 - Direct saved-puzzle HTML downloads plus focused editing at `/activities/:id/edit`
 - Teacher-entered words, ordered phonemes, English labels, and hints rather than fixed activity-only content
