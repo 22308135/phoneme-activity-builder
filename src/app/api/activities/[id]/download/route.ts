@@ -11,7 +11,7 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
   const id = Number((await params).id);
   let snapshot: { activityId?: number; activityTitle?: string; activityType?: "WORDLE" | "WORD_SEARCH" } = {};
   const fail = async (error: string, status: number) => {
-    await recordGeneration({ ...snapshot, success: false, error });
+    await recordGeneration({ ...snapshot, successful: false, error });
     return NextResponse.json({ error }, { status });
   };
   if (!Number.isSafeInteger(id) || id < 1 || id > 2147483647) return fail("Invalid activity ID", 400);
@@ -35,7 +35,7 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
     }
     const html = createGameHtml(isWordle ? "wordle" : "word-search", activity.title, target.sounds.join(" "), activity.hintEnabled ? (target.hint ?? "No hint provided") : "", isWordle ? [target.text] : words.map((word) => word.sounds.join(" ")), difficultyNames[activity.difficulty], grid, gridSize);
     const filename = `${activity.type.toLowerCase().replace("_", "-")}-${activity.id}.html`;
-    await recordGeneration({ ...snapshot, success: true });
+    await recordGeneration({ ...snapshot, successful: true });
     return new NextResponse(html, { headers: { "Content-Type": "text/html; charset=utf-8", "Content-Disposition": `attachment; filename="${filename}"`, "Cache-Control": "no-store" } });
   } catch (error) {
     console.error("Activity generation failed", error);

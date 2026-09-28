@@ -18,29 +18,29 @@ test("dashboard records downloads and failures, retains history, and filters dat
     expect((await request.delete(`/api/activities/${activityId}`)).status()).toBe(204);
     expect((await request.get(`/api/activities/${activityId}/download`)).status()).toBe(404);
     const after = await (await request.get("/api/dashboard?days=7")).json();
-    expect(after.successful).toBe(before.successful + 1);
-    expect(after.failed).toBe(before.failed + 1);
-    expect(after.wordle).toBe(before.wordle);
-    expect(after.recent).toEqual(expect.arrayContaining([expect.objectContaining({ activityTitle: title, success: true })]));
+    expect(after.generationReport.successful).toBe(before.generationReport.successful + 1);
+    expect(after.generationReport.failed).toBe(before.generationReport.failed + 1);
+    expect(after.library.wordle).toBe(before.library.wordle);
+    expect(after.generationReport.recent).toEqual(expect.arrayContaining([expect.objectContaining({ activityTitle: title, successful: true })]));
 
-    const historical = await prisma.generationEvent.create({ data: { success: true, activityType: "WORD_SEARCH", activityTitle: title, createdAt: new Date(Date.now() - 40 * 86400000) } });
+    const historical = await prisma.generationEvent.create({ data: { successful: true, activityType: "WORD_SEARCH", activityTitle: title, createdAt: new Date(Date.now() - 40 * 86400000) } });
     historicalId = historical.id;
     const week = await (await request.get("/api/dashboard?days=7")).json();
     const all = await (await request.get("/api/dashboard?days=all")).json();
-    expect(week.successful).toBe(after.successful);
-    expect(all.successful).toBeGreaterThan(week.successful);
+    expect(week.generationReport.successful).toBe(after.generationReport.successful);
+    expect(all.generationReport.successful).toBeGreaterThan(week.generationReport.successful);
 
     await page.goto("/dashboard?days=7");
     await expect(page.getByRole("heading", { name: "Dashboard", exact: true })).toBeVisible();
-    await expect(page.getByRole("status")).toContainText("Database connected");
-    await expect(page.getByTestId("generation-success")).toHaveText(String(after.successful));
-    await expect(page.getByTestId("generation-failure")).toHaveText(String(after.failed));
+    await expect(page.locator(".dashboard-health")).toContainText("database connected");
+    await expect(page.getByTestId("generation-success")).toHaveText(String(after.generationReport.successful));
+    await expect(page.getByTestId("generation-failure")).toHaveText(String(after.generationReport.failed));
     await expect(page.getByRole("heading", { name: "Needs attention" })).toBeVisible();
     await expect(page.getByRole("cell", { name: title, exact: true })).toBeVisible();
     await page.getByLabel("Generation reporting period").selectOption("all");
     await page.getByRole("button", { name: "Refresh report" }).click();
     await expect(page).toHaveURL(/days=all/);
-    await expect(page.getByTestId("generation-success")).toHaveText(String(all.successful));
+    await expect(page.getByTestId("generation-success")).toHaveText(String(all.generationReport.successful));
     await page.addScriptTag({ content: axe.source });
     const violations = await page.evaluate(async () => {
       const result = await (window as typeof window & { axe: typeof axe }).axe.run();

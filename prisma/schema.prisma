@@ -52,15 +52,26 @@ model DictionaryWord {
   updatedAt DateTime @updatedAt
 }
 
-// Snapshots deliberately survive activity deletion so generation history remains accurate.
+// Independent of Activity so deleting a puzzle does not erase usage history.
 model GenerationEvent {
-  id            Int          @id @default(autoincrement())
-  activityId    Int?
+  id           Int           @id @default(autoincrement())
+  activityId   Int?
   activityTitle String?
-  activityType  ActivityType?
-  success       Boolean
-  error         String?
-  createdAt     DateTime     @default(now())
+  activityType ActivityType?
+  successful   Boolean
+  error        String?
+  createdAt    DateTime      @default(now())
 
+  @@index([successful])
   @@index([createdAt])
+}
+
+// Anonymous builder visits; no names, IP addresses or student results.
+model PageVisit {
+  id           String       @id
+  activityType ActivityType
+  durationMs   Int          @default(0)
+  createdAt    DateTime     @default(now())
+
+  @@index([activityType])
 }
