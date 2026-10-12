@@ -163,6 +163,8 @@ The final 16 audits scored **100/100 with no failed automated accessibility audi
 
 ## 7. Video plan — aim for about seven minutes
 
+Use the updated [timed video script](VIDEO_SCRIPT.md) and [understanding checklist](VIDEO_UNDERSTANDING.md) for the merged version. They include the September 28 results; the original prompts below describe the earlier September 17 run.
+
 | Time | Show | Explain |
 | --- | --- | --- |
 | 0:00–0:25 | Face, student ID and Home | Name, student number, project purpose and Assessment 3 focus. |

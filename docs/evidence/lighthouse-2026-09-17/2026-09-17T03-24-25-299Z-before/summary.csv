@@ -1,0 +1,17 @@
+Page,Viewport,Theme,Accessibility score,Failed audits
+/,desktop,light,100,label-content-name-mismatch
+/dashboard,desktop,light,96,definition-list;label-content-name-mismatch
+/wordle,desktop,light,100,label-content-name-mismatch
+/word-search,desktop,light,100,label-content-name-mismatch
+/,desktop,dark,95,color-contrast;label-content-name-mismatch
+/dashboard,desktop,dark,92,color-contrast;definition-list;label-content-name-mismatch
+/wordle,desktop,dark,96,color-contrast;label-content-name-mismatch
+/word-search,desktop,dark,96,color-contrast;label-content-name-mismatch
+/,mobile,light,100,label-content-name-mismatch
+/dashboard,mobile,light,96,definition-list;label-content-name-mismatch
+/wordle,mobile,light,100,label-content-name-mismatch
+/word-search,mobile,light,100,label-content-name-mismatch
+/,mobile,dark,95,color-contrast;label-content-name-mismatch
+/dashboard,mobile,dark,92,color-contrast;definition-list;label-content-name-mismatch
+/wordle,mobile,dark,96,color-contrast;label-content-name-mismatch
+/word-search,mobile,dark,96,color-contrast;label-content-name-mismatch

@@ -1,0 +1,256 @@
+{
+  "metadata": {
+    "label": "after",
+    "startedAt": "2026-09-17T03:27:37.013Z",
+    "mode": "Lighthouse accessibility snapshots of fully loaded pages",
+    "node": "v24.15.0",
+    "os": "Windows_NT 10.0.26200",
+    "buildId": "ZwF4Cbl5Q03QsaQHal_43",
+    "sourceCommit": "259462335a8db47fdb302401aa7bd7eb489a7e10",
+    "sourceHasUncommittedChanges": true,
+    "browser": "Chrome/153.0.8010.47",
+    "finishedAt": "2026-09-17T03:29:26.165Z"
+  },
+  "results": [
+    {
+      "id": "home-desktop-light",
+      "route": "/",
+      "viewport": "desktop",
+      "theme": "light",
+      "state": {
+        "theme": "light",
+        "viewportWidth": 1280,
+        "pageWidth": 1280,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": []
+    },
+    {
+      "id": "dashboard-desktop-light",
+      "route": "/dashboard",
+      "viewport": "desktop",
+      "theme": "light",
+      "state": {
+        "theme": "light",
+        "viewportWidth": 1280,
+        "pageWidth": 1280,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": []
+    },
+    {
+      "id": "wordle-desktop-light",
+      "route": "/wordle",
+      "viewport": "desktop",
+      "theme": "light",
+      "state": {
+        "theme": "light",
+        "viewportWidth": 1280,
+        "pageWidth": 1280,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": []
+    },
+    {
+      "id": "word-search-desktop-light",
+      "route": "/word-search",
+      "viewport": "desktop",
+      "theme": "light",
+      "state": {
+        "theme": "light",
+        "viewportWidth": 1280,
+        "pageWidth": 1280,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": []
+    },
+    {
+      "id": "home-desktop-dark",
+      "route": "/",
+      "viewport": "desktop",
+      "theme": "dark",
+      "state": {
+        "theme": "dark",
+        "viewportWidth": 1280,
+        "pageWidth": 1280,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": []
+    },
+    {
+      "id": "dashboard-desktop-dark",
+      "route": "/dashboard",
+      "viewport": "desktop",
+      "theme": "dark",
+      "state": {
+        "theme": "dark",
+        "viewportWidth": 1280,
+        "pageWidth": 1280,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": []
+    },
+    {
+      "id": "wordle-desktop-dark",
+      "route": "/wordle",
+      "viewport": "desktop",
+      "theme": "dark",
+      "state": {
+        "theme": "dark",
+        "viewportWidth": 1280,
+        "pageWidth": 1280,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": []
+    },
+    {
+      "id": "word-search-desktop-dark",
+      "route": "/word-search",
+      "viewport": "desktop",
+      "theme": "dark",
+      "state": {
+        "theme": "dark",
+        "viewportWidth": 1280,
+        "pageWidth": 1280,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": []
+    },
+    {
+      "id": "home-mobile-light",
+      "route": "/",
+      "viewport": "mobile",
+      "theme": "light",
+      "state": {
+        "theme": "light",
+        "viewportWidth": 390,
+        "pageWidth": 390,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": []
+    },
+    {
+      "id": "dashboard-mobile-light",
+      "route": "/dashboard",
+      "viewport": "mobile",
+      "theme": "light",
+      "state": {
+        "theme": "light",
+        "viewportWidth": 390,
+        "pageWidth": 390,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": []
+    },
+    {
+      "id": "wordle-mobile-light",
+      "route": "/wordle",
+      "viewport": "mobile",
+      "theme": "light",
+      "state": {
+        "theme": "light",
+        "viewportWidth": 390,
+        "pageWidth": 390,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": []
+    },
+    {
+      "id": "word-search-mobile-light",
+      "route": "/word-search",
+      "viewport": "mobile",
+      "theme": "light",
+      "state": {
+        "theme": "light",
+        "viewportWidth": 390,
+        "pageWidth": 390,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": []
+    },
+    {
+      "id": "home-mobile-dark",
+      "route": "/",
+      "viewport": "mobile",
+      "theme": "dark",
+      "state": {
+        "theme": "dark",
+        "viewportWidth": 390,
+        "pageWidth": 390,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": []
+    },
+    {
+      "id": "dashboard-mobile-dark",
+      "route": "/dashboard",
+      "viewport": "mobile",
+      "theme": "dark",
+      "state": {
+        "theme": "dark",
+        "viewportWidth": 390,
+        "pageWidth": 390,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": []
+    },
+    {
+      "id": "wordle-mobile-dark",
+      "route": "/wordle",
+      "viewport": "mobile",
+      "theme": "dark",
+      "state": {
+        "theme": "dark",
+        "viewportWidth": 390,
+        "pageWidth": 390,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": []
+    },
+    {
+      "id": "word-search-mobile-dark",
+      "route": "/word-search",
+      "viewport": "mobile",
+      "theme": "dark",
+      "state": {
+        "theme": "dark",
+        "viewportWidth": 390,
+        "pageWidth": 390,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": []
+    }
+  ]
+}

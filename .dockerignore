@@ -5,3 +5,10 @@ node_modules
 prisma/*.db
 prisma/*.db-journal
 npm-debug.log*
+artifacts
+playwright-report
+test-results
+*.zip
+docs/evidence
+.env.*
+!.env.example

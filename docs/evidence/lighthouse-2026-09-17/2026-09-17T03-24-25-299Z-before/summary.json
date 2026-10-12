@@ -1,0 +1,2626 @@
+{
+  "metadata": {
+    "label": "before",
+    "startedAt": "2026-09-17T03:24:25.302Z",
+    "mode": "Lighthouse accessibility snapshots of fully loaded pages",
+    "node": "v24.15.0",
+    "os": "Windows_NT 10.0.26200",
+    "buildId": "IbjxmL6bcIPec3IockkOc",
+    "sourceCommit": "259462335a8db47fdb302401aa7bd7eb489a7e10",
+    "sourceHasUncommittedChanges": true,
+    "browser": "Chrome/153.0.8010.47",
+    "finishedAt": "2026-09-17T03:26:27.080Z"
+  },
+  "results": [
+    {
+      "id": "home-desktop-light",
+      "route": "/",
+      "viewport": "desktop",
+      "theme": "light",
+      "state": {
+        "theme": "light",
+        "viewportWidth": 1280,
+        "pageWidth": 1280,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "description": "Visible text labels that do not match the accessible name can result in a confusing experience for screen reader users. [Learn more about accessible names](https://dequeuniversity.com/rules/axe/4.12/label-content-name-mismatch).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-A",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A",
+                  "selector": "body > div.site-shell > header.site-header > a.brand",
+                  "boundingRect": {
+                    "top": 16,
+                    "bottom": 57,
+                    "left": 50,
+                    "right": 205,
+                    "width": 155,
+                    "height": 40
+                  },
+                  "snippet": "<a class=\"brand\" aria-label=\"Phoneme Play Builder home\" href=\"/\">",
+                  "nodeLabel": "/ə/\nPhoneme Play\nBUILDER",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "dashboard-desktop-light",
+      "route": "/dashboard",
+      "viewport": "desktop",
+      "theme": "light",
+      "state": {
+        "theme": "light",
+        "viewportWidth": 1280,
+        "pageWidth": 1280,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 96,
+      "lighthouseVersion": "13.4.1",
+      "failures": [
+        {
+          "id": "definition-list",
+          "title": "`<dl>`'s do not contain only properly-ordered `<dt>` and `<dd>` groups, `<script>`, `<template>` or `<div>` elements.",
+          "description": "When definition lists are not properly marked up, screen readers may produce confusing or inaccurate output. [Learn how to structure definition lists correctly](https://dequeuniversity.com/rules/axe/4.12/definition-list).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-DL",
+                  "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,2,SECTION,1,DL",
+                  "selector": "main#main-content > section.dashboard-page > section > dl.dashboard-metrics",
+                  "boundingRect": {
+                    "top": 397,
+                    "bottom": 587,
+                    "left": 50,
+                    "right": 1230,
+                    "width": 1180,
+                    "height": 190
+                  },
+                  "snippet": "<dl class=\"dashboard-metrics\">",
+                  "nodeLabel": "Wordle activities\n1\n\nSaved Wordle configurations\n\nWord Search activities\n1\n\nSav…",
+                  "explanation": "Fix all of the following:\n  dl element has direct children that are not allowed: div > p"
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-1-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,2,SECTION,1,DL,0,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 522,
+                          "bottom": 543,
+                          "left": 75,
+                          "right": 321,
+                          "width": 246,
+                          "height": 21
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "Saved Wordle configurations"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-2-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,2,SECTION,1,DL,1,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 522,
+                          "bottom": 543,
+                          "left": 370,
+                          "right": 615,
+                          "width": 246,
+                          "height": 21
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "Saved Word Search configurations"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-3-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,2,SECTION,1,DL,2,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 522,
+                          "bottom": 564,
+                          "left": 664,
+                          "right": 910,
+                          "width": 246,
+                          "height": 42
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "Word entries across saved lists; repeats included"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-4-DL",
+                  "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,3,SECTION,1,DL",
+                  "selector": "main#main-content > section.dashboard-page > section > dl.dashboard-metrics",
+                  "boundingRect": {
+                    "top": 658,
+                    "bottom": 833,
+                    "left": 50,
+                    "right": 1230,
+                    "width": 1180,
+                    "height": 175
+                  },
+                  "snippet": "<dl class=\"dashboard-metrics dashboard-usage\">",
+                  "nodeLabel": "Successful generations\n0\n\nHTML outputs prepared for download\n\nFailed generation…",
+                  "explanation": "Fix all of the following:\n  dl element has direct children that are not allowed: div > p"
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-5-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,3,SECTION,1,DL,0,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 768,
+                          "bottom": 789,
+                          "left": 75,
+                          "right": 321,
+                          "width": 246,
+                          "height": 21
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "HTML outputs prepared for download"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-6-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,3,SECTION,1,DL,1,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 768,
+                          "bottom": 810,
+                          "left": 370,
+                          "right": 615,
+                          "width": 246,
+                          "height": 42
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "Download requests that returned an error"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-7-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,3,SECTION,1,DL,2,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 768,
+                          "bottom": 810,
+                          "left": 664,
+                          "right": 910,
+                          "width": 246,
+                          "height": 42
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "Visible time per builder visit; includes ongoing visits"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.structure",
+                "wcag2a",
+                "wcag131",
+                "EN-301-549",
+                "EN-9.1.3.1",
+                "RGAAv4",
+                "RGAA-9.3.3"
+              ]
+            }
+          }
+        },
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "description": "Visible text labels that do not match the accessible name can result in a confusing experience for screen reader users. [Learn more about accessible names](https://dequeuniversity.com/rules/axe/4.12/label-content-name-mismatch).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-8-A",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A",
+                  "selector": "body > div.site-shell > header.site-header > a.brand",
+                  "boundingRect": {
+                    "top": 16,
+                    "bottom": 57,
+                    "left": 50,
+                    "right": 205,
+                    "width": 155,
+                    "height": 40
+                  },
+                  "snippet": "<a class=\"brand\" aria-label=\"Phoneme Play Builder home\" href=\"/\">",
+                  "nodeLabel": "/ə/\nPhoneme Play\nBUILDER",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "wordle-desktop-light",
+      "route": "/wordle",
+      "viewport": "desktop",
+      "theme": "light",
+      "state": {
+        "theme": "light",
+        "viewportWidth": 1280,
+        "pageWidth": 1280,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "description": "Visible text labels that do not match the accessible name can result in a confusing experience for screen reader users. [Learn more about accessible names](https://dequeuniversity.com/rules/axe/4.12/label-content-name-mismatch).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-A",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A",
+                  "selector": "body > div.site-shell > header.site-header > a.brand",
+                  "boundingRect": {
+                    "top": 16,
+                    "bottom": 57,
+                    "left": 50,
+                    "right": 205,
+                    "width": 155,
+                    "height": 40
+                  },
+                  "snippet": "<a class=\"brand\" aria-label=\"Phoneme Play Builder home\" href=\"/\">",
+                  "nodeLabel": "/ə/\nPhoneme Play\nBUILDER",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "word-search-desktop-light",
+      "route": "/word-search",
+      "viewport": "desktop",
+      "theme": "light",
+      "state": {
+        "theme": "light",
+        "viewportWidth": 1280,
+        "pageWidth": 1280,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "description": "Visible text labels that do not match the accessible name can result in a confusing experience for screen reader users. [Learn more about accessible names](https://dequeuniversity.com/rules/axe/4.12/label-content-name-mismatch).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-A",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A",
+                  "selector": "body > div.site-shell > header.site-header > a.brand",
+                  "boundingRect": {
+                    "top": 16,
+                    "bottom": 57,
+                    "left": 50,
+                    "right": 205,
+                    "width": 155,
+                    "height": 40
+                  },
+                  "snippet": "<a class=\"brand\" aria-label=\"Phoneme Play Builder home\" href=\"/\">",
+                  "nodeLabel": "/ə/\nPhoneme Play\nBUILDER",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "home-desktop-dark",
+      "route": "/",
+      "viewport": "desktop",
+      "theme": "dark",
+      "state": {
+        "theme": "dark",
+        "viewportWidth": 1280,
+        "pageWidth": 1280,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 95,
+      "lighthouseVersion": "13.4.1",
+      "failures": [
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+          "description": "Low-contrast text is difficult or impossible for many users to read. [Learn how to provide sufficient color contrast](https://dequeuniversity.com/rules/axe/4.12/color-contrast).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-SPAN",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A,0,SPAN",
+                  "selector": "div.site-shell > header.site-header > a.brand > span.brand-mark",
+                  "boundingRect": {
+                    "top": 19,
+                    "bottom": 53,
+                    "left": 50,
+                    "right": 84,
+                    "width": 34,
+                    "height": 34
+                  },
+                  "snippet": "<span class=\"brand-mark\" aria-hidden=\"true\">",
+                  "nodeLabel": "/ə/",
+                  "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.9 (foreground color: #ffffff, background color: #8fc7b7, font size: 10.8pt (14.4px), font weight: bold). Expected contrast ratio of 4.5:1"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-1-A",
+                  "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,3,DIV,0,A",
+                  "selector": "main#main-content > section.hero > div.hero-actions > a.button",
+                  "boundingRect": {
+                    "top": 521,
+                    "bottom": 565,
+                    "left": 141,
+                    "right": 300,
+                    "width": 159,
+                    "height": 44
+                  },
+                  "snippet": "<a class=\"button primary\" href=\"/wordle\">",
+                  "nodeLabel": "Build a Wordle\n→",
+                  "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.9 (foreground color: #ffffff, background color: #8fc7b7, font size: 10.1pt (13.44px), font weight: bold). Expected contrast ratio of 4.5:1"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.color",
+                "wcag2aa",
+                "wcag143",
+                "TTv5",
+                "TT13.c",
+                "EN-301-549",
+                "EN-9.1.4.3",
+                "ACT",
+                "RGAAv4",
+                "RGAA-3.2.1"
+              ]
+            }
+          }
+        },
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "description": "Visible text labels that do not match the accessible name can result in a confusing experience for screen reader users. [Learn more about accessible names](https://dequeuniversity.com/rules/axe/4.12/label-content-name-mismatch).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-2-A",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A",
+                  "selector": "body > div.site-shell > header.site-header > a.brand",
+                  "boundingRect": {
+                    "top": 16,
+                    "bottom": 57,
+                    "left": 50,
+                    "right": 205,
+                    "width": 155,
+                    "height": 40
+                  },
+                  "snippet": "<a class=\"brand\" aria-label=\"Phoneme Play Builder home\" href=\"/\">",
+                  "nodeLabel": "/ə/\nPhoneme Play\nBUILDER",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "dashboard-desktop-dark",
+      "route": "/dashboard",
+      "viewport": "desktop",
+      "theme": "dark",
+      "state": {
+        "theme": "dark",
+        "viewportWidth": 1280,
+        "pageWidth": 1280,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 92,
+      "lighthouseVersion": "13.4.1",
+      "failures": [
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+          "description": "Low-contrast text is difficult or impossible for many users to read. [Learn how to provide sufficient color contrast](https://dequeuniversity.com/rules/axe/4.12/color-contrast).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-SPAN",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A,0,SPAN",
+                  "selector": "div.site-shell > header.site-header > a.brand > span.brand-mark",
+                  "boundingRect": {
+                    "top": 19,
+                    "bottom": 53,
+                    "left": 50,
+                    "right": 84,
+                    "width": 34,
+                    "height": 34
+                  },
+                  "snippet": "<span class=\"brand-mark\" aria-hidden=\"true\">",
+                  "nodeLabel": "/ə/",
+                  "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.9 (foreground color: #ffffff, background color: #8fc7b7, font size: 10.8pt (14.4px), font weight: bold). Expected contrast ratio of 4.5:1"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.color",
+                "wcag2aa",
+                "wcag143",
+                "TTv5",
+                "TT13.c",
+                "EN-301-549",
+                "EN-9.1.4.3",
+                "ACT",
+                "RGAAv4",
+                "RGAA-3.2.1"
+              ]
+            }
+          }
+        },
+        {
+          "id": "definition-list",
+          "title": "`<dl>`'s do not contain only properly-ordered `<dt>` and `<dd>` groups, `<script>`, `<template>` or `<div>` elements.",
+          "description": "When definition lists are not properly marked up, screen readers may produce confusing or inaccurate output. [Learn how to structure definition lists correctly](https://dequeuniversity.com/rules/axe/4.12/definition-list).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-1-DL",
+                  "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,2,SECTION,1,DL",
+                  "selector": "main#main-content > section.dashboard-page > section > dl.dashboard-metrics",
+                  "boundingRect": {
+                    "top": 397,
+                    "bottom": 587,
+                    "left": 50,
+                    "right": 1230,
+                    "width": 1180,
+                    "height": 190
+                  },
+                  "snippet": "<dl class=\"dashboard-metrics\">",
+                  "nodeLabel": "Wordle activities\n1\n\nSaved Wordle configurations\n\nWord Search activities\n1\n\nSav…",
+                  "explanation": "Fix all of the following:\n  dl element has direct children that are not allowed: div > p"
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-2-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,2,SECTION,1,DL,0,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 522,
+                          "bottom": 543,
+                          "left": 75,
+                          "right": 321,
+                          "width": 246,
+                          "height": 21
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "Saved Wordle configurations"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-3-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,2,SECTION,1,DL,1,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 522,
+                          "bottom": 543,
+                          "left": 370,
+                          "right": 615,
+                          "width": 246,
+                          "height": 21
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "Saved Word Search configurations"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-4-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,2,SECTION,1,DL,2,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 522,
+                          "bottom": 564,
+                          "left": 664,
+                          "right": 910,
+                          "width": 246,
+                          "height": 42
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "Word entries across saved lists; repeats included"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-5-DL",
+                  "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,3,SECTION,1,DL",
+                  "selector": "main#main-content > section.dashboard-page > section > dl.dashboard-metrics",
+                  "boundingRect": {
+                    "top": 658,
+                    "bottom": 833,
+                    "left": 50,
+                    "right": 1230,
+                    "width": 1180,
+                    "height": 175
+                  },
+                  "snippet": "<dl class=\"dashboard-metrics dashboard-usage\">",
+                  "nodeLabel": "Successful generations\n0\n\nHTML outputs prepared for download\n\nFailed generation…",
+                  "explanation": "Fix all of the following:\n  dl element has direct children that are not allowed: div > p"
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-6-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,3,SECTION,1,DL,0,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 768,
+                          "bottom": 789,
+                          "left": 75,
+                          "right": 321,
+                          "width": 246,
+                          "height": 21
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "HTML outputs prepared for download"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-7-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,3,SECTION,1,DL,1,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 768,
+                          "bottom": 810,
+                          "left": 370,
+                          "right": 615,
+                          "width": 246,
+                          "height": 42
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "Download requests that returned an error"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-8-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,3,SECTION,1,DL,2,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 768,
+                          "bottom": 810,
+                          "left": 664,
+                          "right": 910,
+                          "width": 246,
+                          "height": 42
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "Visible time per builder visit; includes ongoing visits"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.structure",
+                "wcag2a",
+                "wcag131",
+                "EN-301-549",
+                "EN-9.1.3.1",
+                "RGAAv4",
+                "RGAA-9.3.3"
+              ]
+            }
+          }
+        },
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "description": "Visible text labels that do not match the accessible name can result in a confusing experience for screen reader users. [Learn more about accessible names](https://dequeuniversity.com/rules/axe/4.12/label-content-name-mismatch).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-9-A",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A",
+                  "selector": "body > div.site-shell > header.site-header > a.brand",
+                  "boundingRect": {
+                    "top": 16,
+                    "bottom": 57,
+                    "left": 50,
+                    "right": 205,
+                    "width": 155,
+                    "height": 40
+                  },
+                  "snippet": "<a class=\"brand\" aria-label=\"Phoneme Play Builder home\" href=\"/\">",
+                  "nodeLabel": "/ə/\nPhoneme Play\nBUILDER",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "wordle-desktop-dark",
+      "route": "/wordle",
+      "viewport": "desktop",
+      "theme": "dark",
+      "state": {
+        "theme": "dark",
+        "viewportWidth": 1280,
+        "pageWidth": 1280,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 96,
+      "lighthouseVersion": "13.4.1",
+      "failures": [
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+          "description": "Low-contrast text is difficult or impossible for many users to read. [Learn how to provide sufficient color contrast](https://dequeuniversity.com/rules/axe/4.12/color-contrast).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-SPAN",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A,0,SPAN",
+                  "selector": "div.site-shell > header.site-header > a.brand > span.brand-mark",
+                  "boundingRect": {
+                    "top": 19,
+                    "bottom": 53,
+                    "left": 50,
+                    "right": 84,
+                    "width": 34,
+                    "height": 34
+                  },
+                  "snippet": "<span class=\"brand-mark\" aria-hidden=\"true\">",
+                  "nodeLabel": "/ə/",
+                  "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.9 (foreground color: #ffffff, background color: #8fc7b7, font size: 10.8pt (14.4px), font weight: bold). Expected contrast ratio of 4.5:1"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-1-BUTTON",
+                  "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,0,ASIDE,5,DIV,1,BUTTON",
+                  "selector": "section.builder-grid > aside.control-panel > div.builder-actions > button.button",
+                  "boundingRect": {
+                    "top": 598,
+                    "bottom": 642,
+                    "left": 50,
+                    "right": 390,
+                    "width": 340,
+                    "height": 44
+                  },
+                  "snippet": "<button type=\"button\" class=\"button primary\">",
+                  "nodeLabel": "Generate & download HTML\n↓",
+                  "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.9 (foreground color: #ffffff, background color: #8fc7b7, font size: 10.1pt (13.44px), font weight: bold). Expected contrast ratio of 4.5:1"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-2-SPAN",
+                  "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,1,SECTION,0,DIV,1,SPAN",
+                  "selector": "section.builder-grid > section.preview-card > div.preview-bar > span.status-dot",
+                  "boundingRect": {
+                    "top": 135,
+                    "bottom": 154,
+                    "left": 1082,
+                    "right": 1211,
+                    "width": 129,
+                    "height": 19
+                  },
+                  "snippet": "<span class=\"status-dot\">",
+                  "nodeLabel": "● 0 OF 6 ATTEMPTS",
+                  "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.38 (foreground color: #176b51, background color: #202624, font size: 9.4pt (12.48px), font weight: normal). Expected contrast ratio of 4.5:1"
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-3-SECTION",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,1,SECTION",
+                        "selector": "div.site-shell > main#main-content > section.builder-grid > section.preview-card",
+                        "boundingRect": {
+                          "top": 122,
+                          "bottom": 1043,
+                          "left": 446,
+                          "right": 1230,
+                          "width": 784,
+                          "height": 921
+                        },
+                        "snippet": "<section class=\"preview-card\" aria-label=\"Live Wordle preview\">",
+                        "nodeLabel": "LIVE PLAYABLE PREVIEW\n● 0 OF 6 ATTEMPTS\n\nPHONEME WORDLE\n\nListen. Look. Build th…"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.color",
+                "wcag2aa",
+                "wcag143",
+                "TTv5",
+                "TT13.c",
+                "EN-301-549",
+                "EN-9.1.4.3",
+                "ACT",
+                "RGAAv4",
+                "RGAA-3.2.1"
+              ]
+            }
+          }
+        },
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "description": "Visible text labels that do not match the accessible name can result in a confusing experience for screen reader users. [Learn more about accessible names](https://dequeuniversity.com/rules/axe/4.12/label-content-name-mismatch).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-4-A",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A",
+                  "selector": "body > div.site-shell > header.site-header > a.brand",
+                  "boundingRect": {
+                    "top": 16,
+                    "bottom": 57,
+                    "left": 50,
+                    "right": 205,
+                    "width": 155,
+                    "height": 40
+                  },
+                  "snippet": "<a class=\"brand\" aria-label=\"Phoneme Play Builder home\" href=\"/\">",
+                  "nodeLabel": "/ə/\nPhoneme Play\nBUILDER",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "word-search-desktop-dark",
+      "route": "/word-search",
+      "viewport": "desktop",
+      "theme": "dark",
+      "state": {
+        "theme": "dark",
+        "viewportWidth": 1280,
+        "pageWidth": 1280,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 96,
+      "lighthouseVersion": "13.4.1",
+      "failures": [
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+          "description": "Low-contrast text is difficult or impossible for many users to read. [Learn how to provide sufficient color contrast](https://dequeuniversity.com/rules/axe/4.12/color-contrast).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-SPAN",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A,0,SPAN",
+                  "selector": "div.site-shell > header.site-header > a.brand > span.brand-mark",
+                  "boundingRect": {
+                    "top": 19,
+                    "bottom": 53,
+                    "left": 50,
+                    "right": 84,
+                    "width": 34,
+                    "height": 34
+                  },
+                  "snippet": "<span class=\"brand-mark\" aria-hidden=\"true\">",
+                  "nodeLabel": "/ə/",
+                  "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.9 (foreground color: #ffffff, background color: #8fc7b7, font size: 10.8pt (14.4px), font weight: bold). Expected contrast ratio of 4.5:1"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-1-BUTTON",
+                  "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,0,ASIDE,4,DIV,1,BUTTON",
+                  "selector": "section.builder-grid > aside.control-panel > div.builder-actions > button.button",
+                  "boundingRect": {
+                    "top": 888,
+                    "bottom": 932,
+                    "left": 50,
+                    "right": 390,
+                    "width": 340,
+                    "height": 44
+                  },
+                  "snippet": "<button type=\"button\" class=\"button primary\">",
+                  "nodeLabel": "Generate & download HTML\n↓",
+                  "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.9 (foreground color: #ffffff, background color: #8fc7b7, font size: 10.1pt (13.44px), font weight: bold). Expected contrast ratio of 4.5:1"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-2-SPAN",
+                  "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,1,SECTION,0,DIV,1,SPAN",
+                  "selector": "section.builder-grid > section.preview-card > div.preview-bar > span.status-dot",
+                  "boundingRect": {
+                    "top": 135,
+                    "bottom": 154,
+                    "left": 1101,
+                    "right": 1211,
+                    "width": 110,
+                    "height": 19
+                  },
+                  "snippet": "<span class=\"status-dot\">",
+                  "nodeLabel": "● 0 OF 5 FOUND",
+                  "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.38 (foreground color: #176b51, background color: #202624, font size: 9.4pt (12.48px), font weight: normal). Expected contrast ratio of 4.5:1"
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-3-SECTION",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,1,SECTION",
+                        "selector": "div.site-shell > main#main-content > section.builder-grid > section.preview-card",
+                        "boundingRect": {
+                          "top": 122,
+                          "bottom": 1139,
+                          "left": 446,
+                          "right": 1230,
+                          "width": 784,
+                          "height": 1017
+                        },
+                        "snippet": "<section class=\"preview-card\" aria-label=\"Live Word Search preview\">",
+                        "nodeLabel": "LIVE PLAYABLE PREVIEW\n● 0 OF 5 FOUND\n\nPHONEME WORD SEARCH\n\nFind the sound patte…"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.color",
+                "wcag2aa",
+                "wcag143",
+                "TTv5",
+                "TT13.c",
+                "EN-301-549",
+                "EN-9.1.4.3",
+                "ACT",
+                "RGAAv4",
+                "RGAA-3.2.1"
+              ]
+            }
+          }
+        },
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "description": "Visible text labels that do not match the accessible name can result in a confusing experience for screen reader users. [Learn more about accessible names](https://dequeuniversity.com/rules/axe/4.12/label-content-name-mismatch).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-4-A",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A",
+                  "selector": "body > div.site-shell > header.site-header > a.brand",
+                  "boundingRect": {
+                    "top": 16,
+                    "bottom": 57,
+                    "left": 50,
+                    "right": 205,
+                    "width": 155,
+                    "height": 40
+                  },
+                  "snippet": "<a class=\"brand\" aria-label=\"Phoneme Play Builder home\" href=\"/\">",
+                  "nodeLabel": "/ə/\nPhoneme Play\nBUILDER",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "home-mobile-light",
+      "route": "/",
+      "viewport": "mobile",
+      "theme": "light",
+      "state": {
+        "theme": "light",
+        "viewportWidth": 390,
+        "pageWidth": 390,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "description": "Visible text labels that do not match the accessible name can result in a confusing experience for screen reader users. [Learn more about accessible names](https://dequeuniversity.com/rules/axe/4.12/label-content-name-mismatch).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-A",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A",
+                  "selector": "body > div.site-shell > header.site-header > a.brand",
+                  "boundingRect": {
+                    "top": 16,
+                    "bottom": 57,
+                    "left": 15,
+                    "right": 170,
+                    "width": 155,
+                    "height": 40
+                  },
+                  "snippet": "<a class=\"brand\" aria-label=\"Phoneme Play Builder home\" href=\"/\">",
+                  "nodeLabel": "/ə/\nPhoneme Play\nBUILDER",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "dashboard-mobile-light",
+      "route": "/dashboard",
+      "viewport": "mobile",
+      "theme": "light",
+      "state": {
+        "theme": "light",
+        "viewportWidth": 390,
+        "pageWidth": 390,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 96,
+      "lighthouseVersion": "13.4.1",
+      "failures": [
+        {
+          "id": "definition-list",
+          "title": "`<dl>`'s do not contain only properly-ordered `<dt>` and `<dd>` groups, `<script>`, `<template>` or `<div>` elements.",
+          "description": "When definition lists are not properly marked up, screen readers may produce confusing or inaccurate output. [Learn how to structure definition lists correctly](https://dequeuniversity.com/rules/axe/4.12/definition-list).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-DL",
+                  "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,2,SECTION,1,DL",
+                  "selector": "main#main-content > section.dashboard-page > section > dl.dashboard-metrics",
+                  "boundingRect": {
+                    "top": 514,
+                    "bottom": 897,
+                    "left": 15,
+                    "right": 375,
+                    "width": 360,
+                    "height": 384
+                  },
+                  "snippet": "<dl class=\"dashboard-metrics\">",
+                  "nodeLabel": "Wordle activities\n1\n\nSaved Wordle configurations\n\nWord Search activities\n1\n\nSav…",
+                  "explanation": "Fix all of the following:\n  dl element has direct children that are not allowed: div > p"
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-1-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,2,SECTION,1,DL,0,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 635,
+                          "bottom": 677,
+                          "left": 30,
+                          "right": 180,
+                          "width": 150,
+                          "height": 42
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "Saved Wordle configurations"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-2-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,2,SECTION,1,DL,1,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 635,
+                          "bottom": 677,
+                          "left": 209,
+                          "right": 360,
+                          "width": 151,
+                          "height": 42
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "Saved Word Search configurations"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-3-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,2,SECTION,1,DL,2,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 815,
+                          "bottom": 878,
+                          "left": 30,
+                          "right": 180,
+                          "width": 150,
+                          "height": 63
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "Word entries across saved lists; repeats included"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-4-DL",
+                  "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,3,SECTION,1,DL",
+                  "selector": "main#main-content > section.dashboard-page > section > dl.dashboard-metrics",
+                  "boundingRect": {
+                    "top": 997,
+                    "bottom": 1352,
+                    "left": 15,
+                    "right": 375,
+                    "width": 360,
+                    "height": 355
+                  },
+                  "snippet": "<dl class=\"dashboard-metrics dashboard-usage\">",
+                  "nodeLabel": "Successful generations\n0\n\nHTML outputs prepared for download\n\nFailed generation…",
+                  "explanation": "Fix all of the following:\n  dl element has direct children that are not allowed: div > p"
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-5-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,3,SECTION,1,DL,0,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 1104,
+                          "bottom": 1146,
+                          "left": 30,
+                          "right": 180,
+                          "width": 150,
+                          "height": 42
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "HTML outputs prepared for download"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-6-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,3,SECTION,1,DL,1,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 1104,
+                          "bottom": 1146,
+                          "left": 209,
+                          "right": 360,
+                          "width": 151,
+                          "height": 42
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "Download requests that returned an error"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-7-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,3,SECTION,1,DL,2,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 1270,
+                          "bottom": 1333,
+                          "left": 30,
+                          "right": 180,
+                          "width": 150,
+                          "height": 63
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "Visible time per builder visit; includes ongoing visits"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.structure",
+                "wcag2a",
+                "wcag131",
+                "EN-301-549",
+                "EN-9.1.3.1",
+                "RGAAv4",
+                "RGAA-9.3.3"
+              ]
+            }
+          }
+        },
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "description": "Visible text labels that do not match the accessible name can result in a confusing experience for screen reader users. [Learn more about accessible names](https://dequeuniversity.com/rules/axe/4.12/label-content-name-mismatch).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-8-A",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A",
+                  "selector": "body > div.site-shell > header.site-header > a.brand",
+                  "boundingRect": {
+                    "top": 16,
+                    "bottom": 57,
+                    "left": 15,
+                    "right": 170,
+                    "width": 155,
+                    "height": 40
+                  },
+                  "snippet": "<a class=\"brand\" aria-label=\"Phoneme Play Builder home\" href=\"/\">",
+                  "nodeLabel": "/ə/\nPhoneme Play\nBUILDER",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "wordle-mobile-light",
+      "route": "/wordle",
+      "viewport": "mobile",
+      "theme": "light",
+      "state": {
+        "theme": "light",
+        "viewportWidth": 390,
+        "pageWidth": 390,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "description": "Visible text labels that do not match the accessible name can result in a confusing experience for screen reader users. [Learn more about accessible names](https://dequeuniversity.com/rules/axe/4.12/label-content-name-mismatch).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-A",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A",
+                  "selector": "body > div.site-shell > header.site-header > a.brand",
+                  "boundingRect": {
+                    "top": 16,
+                    "bottom": 57,
+                    "left": 15,
+                    "right": 170,
+                    "width": 155,
+                    "height": 40
+                  },
+                  "snippet": "<a class=\"brand\" aria-label=\"Phoneme Play Builder home\" href=\"/\">",
+                  "nodeLabel": "/ə/\nPhoneme Play\nBUILDER",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "word-search-mobile-light",
+      "route": "/word-search",
+      "viewport": "mobile",
+      "theme": "light",
+      "state": {
+        "theme": "light",
+        "viewportWidth": 390,
+        "pageWidth": 390,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 100,
+      "lighthouseVersion": "13.4.1",
+      "failures": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "description": "Visible text labels that do not match the accessible name can result in a confusing experience for screen reader users. [Learn more about accessible names](https://dequeuniversity.com/rules/axe/4.12/label-content-name-mismatch).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-A",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A",
+                  "selector": "body > div.site-shell > header.site-header > a.brand",
+                  "boundingRect": {
+                    "top": 16,
+                    "bottom": 57,
+                    "left": 15,
+                    "right": 170,
+                    "width": 155,
+                    "height": 40
+                  },
+                  "snippet": "<a class=\"brand\" aria-label=\"Phoneme Play Builder home\" href=\"/\">",
+                  "nodeLabel": "/ə/\nPhoneme Play\nBUILDER",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "home-mobile-dark",
+      "route": "/",
+      "viewport": "mobile",
+      "theme": "dark",
+      "state": {
+        "theme": "dark",
+        "viewportWidth": 390,
+        "pageWidth": 390,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 95,
+      "lighthouseVersion": "13.4.1",
+      "failures": [
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+          "description": "Low-contrast text is difficult or impossible for many users to read. [Learn how to provide sufficient color contrast](https://dequeuniversity.com/rules/axe/4.12/color-contrast).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-SPAN",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A,0,SPAN",
+                  "selector": "div.site-shell > header.site-header > a.brand > span.brand-mark",
+                  "boundingRect": {
+                    "top": 19,
+                    "bottom": 53,
+                    "left": 15,
+                    "right": 49,
+                    "width": 34,
+                    "height": 34
+                  },
+                  "snippet": "<span class=\"brand-mark\" aria-hidden=\"true\">",
+                  "nodeLabel": "/ə/",
+                  "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.9 (foreground color: #ffffff, background color: #8fc7b7, font size: 10.8pt (14.4px), font weight: bold). Expected contrast ratio of 4.5:1"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-1-A",
+                  "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,3,DIV,0,A",
+                  "selector": "main#main-content > section.hero > div.hero-actions > a.button",
+                  "boundingRect": {
+                    "top": 496,
+                    "bottom": 540,
+                    "left": 40,
+                    "right": 199,
+                    "width": 159,
+                    "height": 44
+                  },
+                  "snippet": "<a class=\"button primary\" href=\"/wordle\">",
+                  "nodeLabel": "Build a Wordle\n→",
+                  "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.9 (foreground color: #ffffff, background color: #8fc7b7, font size: 10.1pt (13.44px), font weight: bold). Expected contrast ratio of 4.5:1"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.color",
+                "wcag2aa",
+                "wcag143",
+                "TTv5",
+                "TT13.c",
+                "EN-301-549",
+                "EN-9.1.4.3",
+                "ACT",
+                "RGAAv4",
+                "RGAA-3.2.1"
+              ]
+            }
+          }
+        },
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "description": "Visible text labels that do not match the accessible name can result in a confusing experience for screen reader users. [Learn more about accessible names](https://dequeuniversity.com/rules/axe/4.12/label-content-name-mismatch).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-2-A",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A",
+                  "selector": "body > div.site-shell > header.site-header > a.brand",
+                  "boundingRect": {
+                    "top": 16,
+                    "bottom": 57,
+                    "left": 15,
+                    "right": 170,
+                    "width": 155,
+                    "height": 40
+                  },
+                  "snippet": "<a class=\"brand\" aria-label=\"Phoneme Play Builder home\" href=\"/\">",
+                  "nodeLabel": "/ə/\nPhoneme Play\nBUILDER",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "dashboard-mobile-dark",
+      "route": "/dashboard",
+      "viewport": "mobile",
+      "theme": "dark",
+      "state": {
+        "theme": "dark",
+        "viewportWidth": 390,
+        "pageWidth": 390,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 92,
+      "lighthouseVersion": "13.4.1",
+      "failures": [
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+          "description": "Low-contrast text is difficult or impossible for many users to read. [Learn how to provide sufficient color contrast](https://dequeuniversity.com/rules/axe/4.12/color-contrast).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-SPAN",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A,0,SPAN",
+                  "selector": "div.site-shell > header.site-header > a.brand > span.brand-mark",
+                  "boundingRect": {
+                    "top": 19,
+                    "bottom": 53,
+                    "left": 15,
+                    "right": 49,
+                    "width": 34,
+                    "height": 34
+                  },
+                  "snippet": "<span class=\"brand-mark\" aria-hidden=\"true\">",
+                  "nodeLabel": "/ə/",
+                  "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.9 (foreground color: #ffffff, background color: #8fc7b7, font size: 10.8pt (14.4px), font weight: bold). Expected contrast ratio of 4.5:1"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.color",
+                "wcag2aa",
+                "wcag143",
+                "TTv5",
+                "TT13.c",
+                "EN-301-549",
+                "EN-9.1.4.3",
+                "ACT",
+                "RGAAv4",
+                "RGAA-3.2.1"
+              ]
+            }
+          }
+        },
+        {
+          "id": "definition-list",
+          "title": "`<dl>`'s do not contain only properly-ordered `<dt>` and `<dd>` groups, `<script>`, `<template>` or `<div>` elements.",
+          "description": "When definition lists are not properly marked up, screen readers may produce confusing or inaccurate output. [Learn how to structure definition lists correctly](https://dequeuniversity.com/rules/axe/4.12/definition-list).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-1-DL",
+                  "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,2,SECTION,1,DL",
+                  "selector": "main#main-content > section.dashboard-page > section > dl.dashboard-metrics",
+                  "boundingRect": {
+                    "top": 514,
+                    "bottom": 897,
+                    "left": 15,
+                    "right": 375,
+                    "width": 360,
+                    "height": 384
+                  },
+                  "snippet": "<dl class=\"dashboard-metrics\">",
+                  "nodeLabel": "Wordle activities\n1\n\nSaved Wordle configurations\n\nWord Search activities\n1\n\nSav…",
+                  "explanation": "Fix all of the following:\n  dl element has direct children that are not allowed: div > p"
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-2-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,2,SECTION,1,DL,0,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 635,
+                          "bottom": 677,
+                          "left": 30,
+                          "right": 180,
+                          "width": 150,
+                          "height": 42
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "Saved Wordle configurations"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-3-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,2,SECTION,1,DL,1,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 635,
+                          "bottom": 677,
+                          "left": 209,
+                          "right": 360,
+                          "width": 151,
+                          "height": 42
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "Saved Word Search configurations"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-4-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,2,SECTION,1,DL,2,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 815,
+                          "bottom": 878,
+                          "left": 30,
+                          "right": 180,
+                          "width": 150,
+                          "height": 63
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "Word entries across saved lists; repeats included"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-5-DL",
+                  "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,3,SECTION,1,DL",
+                  "selector": "main#main-content > section.dashboard-page > section > dl.dashboard-metrics",
+                  "boundingRect": {
+                    "top": 997,
+                    "bottom": 1352,
+                    "left": 15,
+                    "right": 375,
+                    "width": 360,
+                    "height": 355
+                  },
+                  "snippet": "<dl class=\"dashboard-metrics dashboard-usage\">",
+                  "nodeLabel": "Successful generations\n0\n\nHTML outputs prepared for download\n\nFailed generation…",
+                  "explanation": "Fix all of the following:\n  dl element has direct children that are not allowed: div > p"
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-6-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,3,SECTION,1,DL,0,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 1104,
+                          "bottom": 1146,
+                          "left": 30,
+                          "right": 180,
+                          "width": 150,
+                          "height": 42
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "HTML outputs prepared for download"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-7-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,3,SECTION,1,DL,1,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 1104,
+                          "bottom": 1146,
+                          "left": 209,
+                          "right": 360,
+                          "width": 151,
+                          "height": 42
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "Download requests that returned an error"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-8-P",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,3,SECTION,1,DL,2,DIV,2,P",
+                        "selector": "section > dl.dashboard-metrics > div.dashboard-metric > p",
+                        "boundingRect": {
+                          "top": 1270,
+                          "bottom": 1333,
+                          "left": 30,
+                          "right": 180,
+                          "width": 150,
+                          "height": 63
+                        },
+                        "snippet": "<p>",
+                        "nodeLabel": "Visible time per builder visit; includes ongoing visits"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.structure",
+                "wcag2a",
+                "wcag131",
+                "EN-301-549",
+                "EN-9.1.3.1",
+                "RGAAv4",
+                "RGAA-9.3.3"
+              ]
+            }
+          }
+        },
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "description": "Visible text labels that do not match the accessible name can result in a confusing experience for screen reader users. [Learn more about accessible names](https://dequeuniversity.com/rules/axe/4.12/label-content-name-mismatch).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-9-A",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A",
+                  "selector": "body > div.site-shell > header.site-header > a.brand",
+                  "boundingRect": {
+                    "top": 16,
+                    "bottom": 57,
+                    "left": 15,
+                    "right": 170,
+                    "width": 155,
+                    "height": 40
+                  },
+                  "snippet": "<a class=\"brand\" aria-label=\"Phoneme Play Builder home\" href=\"/\">",
+                  "nodeLabel": "/ə/\nPhoneme Play\nBUILDER",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "wordle-mobile-dark",
+      "route": "/wordle",
+      "viewport": "mobile",
+      "theme": "dark",
+      "state": {
+        "theme": "dark",
+        "viewportWidth": 390,
+        "pageWidth": 390,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 96,
+      "lighthouseVersion": "13.4.1",
+      "failures": [
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+          "description": "Low-contrast text is difficult or impossible for many users to read. [Learn how to provide sufficient color contrast](https://dequeuniversity.com/rules/axe/4.12/color-contrast).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-SPAN",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A,0,SPAN",
+                  "selector": "div.site-shell > header.site-header > a.brand > span.brand-mark",
+                  "boundingRect": {
+                    "top": 19,
+                    "bottom": 53,
+                    "left": 15,
+                    "right": 49,
+                    "width": 34,
+                    "height": 34
+                  },
+                  "snippet": "<span class=\"brand-mark\" aria-hidden=\"true\">",
+                  "nodeLabel": "/ə/",
+                  "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.9 (foreground color: #ffffff, background color: #8fc7b7, font size: 10.8pt (14.4px), font weight: bold). Expected contrast ratio of 4.5:1"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-1-BUTTON",
+                  "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,0,ASIDE,5,DIV,1,BUTTON",
+                  "selector": "section.builder-grid > aside.control-panel > div.builder-actions > button.button",
+                  "boundingRect": {
+                    "top": 578,
+                    "bottom": 622,
+                    "left": 15,
+                    "right": 375,
+                    "width": 360,
+                    "height": 44
+                  },
+                  "snippet": "<button type=\"button\" class=\"button primary\">",
+                  "nodeLabel": "Generate & download HTML\n↓",
+                  "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.9 (foreground color: #ffffff, background color: #8fc7b7, font size: 10.1pt (13.44px), font weight: bold). Expected contrast ratio of 4.5:1"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-2-SPAN",
+                  "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,1,SECTION,0,DIV,1,SPAN",
+                  "selector": "section.builder-grid > section.preview-card > div.preview-bar > span.status-dot",
+                  "boundingRect": {
+                    "top": 693,
+                    "bottom": 712,
+                    "left": 227,
+                    "right": 356,
+                    "width": 129,
+                    "height": 19
+                  },
+                  "snippet": "<span class=\"status-dot\">",
+                  "nodeLabel": "● 0 OF 6 ATTEMPTS",
+                  "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.38 (foreground color: #176b51, background color: #202624, font size: 9.4pt (12.48px), font weight: normal). Expected contrast ratio of 4.5:1"
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-3-SECTION",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,1,SECTION",
+                        "selector": "div.site-shell > main#main-content > section.builder-grid > section.preview-card",
+                        "boundingRect": {
+                          "top": 680,
+                          "bottom": 1638,
+                          "left": 15,
+                          "right": 375,
+                          "width": 360,
+                          "height": 957
+                        },
+                        "snippet": "<section class=\"preview-card\" aria-label=\"Live Wordle preview\">",
+                        "nodeLabel": "LIVE PLAYABLE PREVIEW\n● 0 OF 6 ATTEMPTS\n\nPHONEME WORDLE\n\nListen. Look. Build th…"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.color",
+                "wcag2aa",
+                "wcag143",
+                "TTv5",
+                "TT13.c",
+                "EN-301-549",
+                "EN-9.1.4.3",
+                "ACT",
+                "RGAAv4",
+                "RGAA-3.2.1"
+              ]
+            }
+          }
+        },
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "description": "Visible text labels that do not match the accessible name can result in a confusing experience for screen reader users. [Learn more about accessible names](https://dequeuniversity.com/rules/axe/4.12/label-content-name-mismatch).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-4-A",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A",
+                  "selector": "body > div.site-shell > header.site-header > a.brand",
+                  "boundingRect": {
+                    "top": 16,
+                    "bottom": 57,
+                    "left": 15,
+                    "right": 170,
+                    "width": 155,
+                    "height": 40
+                  },
+                  "snippet": "<a class=\"brand\" aria-label=\"Phoneme Play Builder home\" href=\"/\">",
+                  "nodeLabel": "/ə/\nPhoneme Play\nBUILDER",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "word-search-mobile-dark",
+      "route": "/word-search",
+      "viewport": "mobile",
+      "theme": "dark",
+      "state": {
+        "theme": "dark",
+        "viewportWidth": 390,
+        "pageWidth": 390,
+        "title": "Phoneme Play Builder"
+      },
+      "score": 96,
+      "lighthouseVersion": "13.4.1",
+      "failures": [
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+          "description": "Low-contrast text is difficult or impossible for many users to read. [Learn how to provide sufficient color contrast](https://dequeuniversity.com/rules/axe/4.12/color-contrast).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-SPAN",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A,0,SPAN",
+                  "selector": "div.site-shell > header.site-header > a.brand > span.brand-mark",
+                  "boundingRect": {
+                    "top": 19,
+                    "bottom": 53,
+                    "left": 15,
+                    "right": 49,
+                    "width": 34,
+                    "height": 34
+                  },
+                  "snippet": "<span class=\"brand-mark\" aria-hidden=\"true\">",
+                  "nodeLabel": "/ə/",
+                  "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.9 (foreground color: #ffffff, background color: #8fc7b7, font size: 10.8pt (14.4px), font weight: bold). Expected contrast ratio of 4.5:1"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-1-BUTTON",
+                  "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,0,ASIDE,4,DIV,1,BUTTON",
+                  "selector": "section.builder-grid > aside.control-panel > div.builder-actions > button.button",
+                  "boundingRect": {
+                    "top": 868,
+                    "bottom": 912,
+                    "left": 15,
+                    "right": 375,
+                    "width": 360,
+                    "height": 44
+                  },
+                  "snippet": "<button type=\"button\" class=\"button primary\">",
+                  "nodeLabel": "Generate & download HTML\n↓",
+                  "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.9 (foreground color: #ffffff, background color: #8fc7b7, font size: 10.1pt (13.44px), font weight: bold). Expected contrast ratio of 4.5:1"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-2-SPAN",
+                  "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,1,SECTION,0,DIV,1,SPAN",
+                  "selector": "section.builder-grid > section.preview-card > div.preview-bar > span.status-dot",
+                  "boundingRect": {
+                    "top": 983,
+                    "bottom": 1002,
+                    "left": 246,
+                    "right": 356,
+                    "width": 110,
+                    "height": 19
+                  },
+                  "snippet": "<span class=\"status-dot\">",
+                  "nodeLabel": "● 0 OF 5 FOUND",
+                  "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.38 (foreground color: #176b51, background color: #202624, font size: 9.4pt (12.48px), font weight: normal). Expected contrast ratio of 4.5:1"
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-3-SECTION",
+                        "path": "1,HTML,1,BODY,1,DIV,2,MAIN,0,SECTION,1,SECTION",
+                        "selector": "div.site-shell > main#main-content > section.builder-grid > section.preview-card",
+                        "boundingRect": {
+                          "top": 970,
+                          "bottom": 1911,
+                          "left": 15,
+                          "right": 375,
+                          "width": 360,
+                          "height": 941
+                        },
+                        "snippet": "<section class=\"preview-card\" aria-label=\"Live Word Search preview\">",
+                        "nodeLabel": "LIVE PLAYABLE PREVIEW\n● 0 OF 5 FOUND\n\nPHONEME WORD SEARCH\n\nFind the sound patte…"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.color",
+                "wcag2aa",
+                "wcag143",
+                "TTv5",
+                "TT13.c",
+                "EN-301-549",
+                "EN-9.1.4.3",
+                "ACT",
+                "RGAAv4",
+                "RGAA-3.2.1"
+              ]
+            }
+          }
+        },
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "description": "Visible text labels that do not match the accessible name can result in a confusing experience for screen reader users. [Learn more about accessible names](https://dequeuniversity.com/rules/axe/4.12/label-content-name-mismatch).",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-4-A",
+                  "path": "1,HTML,1,BODY,1,DIV,1,HEADER,0,A",
+                  "selector": "body > div.site-shell > header.site-header > a.brand",
+                  "boundingRect": {
+                    "top": 16,
+                    "bottom": 57,
+                    "left": 15,
+                    "right": 170,
+                    "width": 155,
+                    "height": 40
+                  },
+                  "snippet": "<a class=\"brand\" aria-label=\"Phoneme Play Builder home\" href=\"/\">",
+                  "nodeLabel": "/ə/\nPhoneme Play\nBUILDER",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
